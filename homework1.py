@@ -2,6 +2,21 @@ import pdb
 import random
 import pylab as pl
 from scipy.optimize import fmin_bfgs
+import numpy as np
+
+def gradientDescent(func, gradient, guess, stopChange, stepRate, momentumWeight):
+    lastChange = float('inf')
+    prevGuess = guess
+    print('guess, gradient, lastChange')
+    while lastChange > stopChange:
+        g = gradient(guess)
+        newGuess = guess - stepRate * g \
+                   + momentumWeight*(guess - prevGuess)
+        guess = newGuess
+        prevGuess = guess
+        lastChange = np.linalg.norm(guess - prevGuess)
+        print('%s, %s, %s' % (guess, g, lastChange))
+    return guess
 
 # X is an array of N data points (one dimensional for now), that is, NX1
 # Y is a Nx1 column vector of data values
@@ -42,3 +57,16 @@ def regressBData():
 def validateData():
     return getData('regress_validate.txt')
 
+
+
+if __name__ == '__main__':
+    def bowl(x):
+        a, b = x
+        return a*a + b*b
+
+    def bowlGradient(x):
+        a, b = x
+        return np.array((2*a, 2*b))
+
+    z = gradientDescent(bowl, bowlGradient, np.array((3, 5)), 0.01, 0.01, 0.1)
+    print(z)
