@@ -4,19 +4,30 @@ import pylab as pl
 from scipy.optimize import fmin_bfgs
 import numpy as np
 
-def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, momentumWeight=0.1):
+def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, momentumWeight=0.1, verbose=False):
     lastChange = float('inf')
     prevGuess = guess
-    print('guess, gradient, lastChange')
+    funcVal = func(guess)
+    
+    if verbose:
+        print('guess, gradient, funcVal, lastChange')
+
     while lastChange > stopChange:
         g = gradient(guess)
-        print('%s, %s, %s' % (guess, g, lastChange))
+        if verbose: print('%s, %s, %s, %s' % (guess, g, funcVal, lastChange))
+
         newGuess = guess - stepRate * g \
                    + momentumWeight*(guess - prevGuess)
         prevGuess = guess
         guess = newGuess
-        lastChange = np.linalg.norm(guess - prevGuess)
+
+        lastFuncVal = funcVal
+        funcVal = func(guess)
+        lastChange = abs(funcVal - lastFuncVal)
     return guess
+
+def numericalGradient(func, point):
+    pass
 
 # X is an array of N data points (one dimensional for now), that is, NX1
 # Y is a Nx1 column vector of data values
@@ -68,8 +79,36 @@ if __name__ == '__main__':
         a, b = x
         return np.array((2*a, 2*b))
 
+    def makeGaussian(mean, variance):
+        def gaussian(x):
+            return 1 / np.sqrt(2 * np.pi * variance) * \
+                np.exp(- (x - mean)**2 / (2 * variance))
+        def gradient(x):
+            return gaussian(x) * (mean - x) / variance
+        return gaussian, gradient
+
+    def negate(func):
+        return lambda x: -func(x)
+
+    print('quadratic bowl:')
     z = gradientDescent(bowl, bowlGradient, np.array((3, 5)), 
         stopChange=0.00000001,
         stepRate=0.01,
         momentumWeight=0.1)
     print(z)
+    print('scipy.optimize.fmin_bfgs: ')
+    print(fmin_bfgs(bowl, np.array((3, 5)), bowlGradient))
+    print('-'*60)
+    print('inverted gaussian:')
+
+    gaussian, gaussianGradient = makeGaussian(10, 4)
+    invertedGaussian = negate(gaussian)
+    invertedGaussianGradient = negate(gaussianGradient)
+    print(gradientDescent(invertedGaussian, invertedGaussianGradient, np.array((5)),
+        stopChange = 1e-7,
+        stepRate = 0.05,
+        momentumWeight = 0.1))
+    print(fmin_bfgs(invertedGaussian, np.array((5)), invertedGaussianGradient))
+
+
+    
