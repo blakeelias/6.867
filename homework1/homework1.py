@@ -26,8 +26,21 @@ def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, mome
         lastChange = abs(funcVal - lastFuncVal)
     return guess
 
-def numericalGradient(func, point):
-    pass
+def numericalGradient(func, point, intervalWidth = 1e-3):
+    def numericalDerivative(func, x, intervalWidth):
+        return (func(x + 0.5 * intervalWidth) - \
+            func(x - 0.5 * intervalWidth))/intervalWidth
+
+    answer = []
+    for i in range(len(point)):
+        def componentFunction(x):
+            newPoint = np.array(point)
+            newPoint[i] = x
+            print('point, newPoint: %s, %s' % (point, newPoint))
+            return func(newPoint)
+        answer.append(numericalDerivative(componentFunction, \
+            point[i], intervalWidth))
+    return answer
 
 # X is an array of N data points (one dimensional for now), that is, NX1
 # Y is a Nx1 column vector of data values
@@ -90,7 +103,7 @@ if __name__ == '__main__':
     def negate(func):
         return lambda x: -func(x)
 
-    print('quadratic bowl:')
+    '''print('quadratic bowl:')
     z = gradientDescent(bowl, bowlGradient, np.array((3, 5)), 
         stopChange=0.00000001,
         stepRate=0.01,
@@ -108,7 +121,9 @@ if __name__ == '__main__':
         stopChange = 1e-7,
         stepRate = 0.05,
         momentumWeight = 0.1))
-    print(fmin_bfgs(invertedGaussian, np.array((5)), invertedGaussianGradient))
+    print(fmin_bfgs(invertedGaussian, np.array((5)), invertedGaussianGradient))'''
 
 
-    
+    print numericalGradient(bowl, np.array((3, 5)), intervalWidth = 1e-10)
+    print bowlGradient(np.array((3, 5)))
+
