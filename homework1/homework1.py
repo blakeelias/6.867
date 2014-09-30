@@ -10,12 +10,12 @@ def gradientDescent(func, gradient, guess, stopChange, stepRate, momentumWeight)
     print('guess, gradient, lastChange')
     while lastChange > stopChange:
         g = gradient(guess)
+        print('%s, %s, %s' % (guess, g, lastChange))
         newGuess = guess - stepRate * g \
                    + momentumWeight*(guess - prevGuess)
         prevGuess = guess
         guess = newGuess
         lastChange = np.linalg.norm(guess - prevGuess)
-        print('%s, %s, %s' % (guess, g, lastChange))
     return guess
 
 # X is an array of N data points (one dimensional for now), that is, NX1
