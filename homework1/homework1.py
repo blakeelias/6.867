@@ -39,16 +39,19 @@ def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, mome
 # Problem 1
 def numericalGradient(func, point, intervalWidth = 1e-3):
     def numericalDerivative(func, x, intervalWidth):
-        return (func(x + 0.5 * intervalWidth) - \
-            func(x - 0.5 * intervalWidth))/intervalWidth
+        high = func(x + 0.5 * intervalWidth)
+        low = func(x - 0.5 * intervalWidth)
+        return (high - low)/intervalWidth
 
     answer = []
     for i in range(len(point)):
         def componentFunction(x):
             newPoint = np.array(point)
             newPoint[i] = x
-            print('point, newPoint: %s, %s' % (point, newPoint))
-            return func(newPoint)
+            #print('point, newPoint: %s, %s' % (point, newPoint))
+            val = func(newPoint)
+            #print('value at newPoint: %f' % val)
+            return val
         answer.append(numericalDerivative(componentFunction, \
             point[i], intervalWidth))
     return answer
@@ -73,7 +76,9 @@ def regressionPlot(X, Y, order):
     Yp = pl.dot(w.T, designMatrix(pts, order).T)
     pl.plot(pts, Yp.tolist()[0])
     print('error: %f' % sumOfSquaresErrorGenerator(phi, Y)(w))
-    print('error gradient: %s' % sumOfSquaresErrorGradientGenerator(phi, Y)(w))
+    print('analytical error gradient: %s' % sumOfSquaresErrorGradientGenerator(phi, Y)(w))
+    print('numerical error gradient: %s' % \
+        numericalGradient(sumOfSquaresErrorGenerator(phi, Y), w, 1e-5))
 
 # Problem 2.1
 def designMatrix(X, order):
@@ -93,12 +98,13 @@ def sumOfSquaresErrorGenerator(phi, Y):
         '''Given data points X, a vector Y of values, a feature (design) matrix phi,
         and a weight vector w, compute the sum of squares error (SSE)'''
         Yp = pl.dot(w.T, phi.T)
-        print(Y.T)
-        print(Yp)
+        #print(Y.T)
+        #print(Yp)
         #print(Yp - Y)
         return np.linalg.norm(Yp - Y.T)**2
     return sumOfSquaresError
 
+# Problem 2.2
 def sumOfSquaresErrorGradientGenerator(phi, Y):
     def sumOfSquaresErrorGradient(w):
         return 2 * pl.dot(phi.T, pl.dot(phi, w) - Y)
