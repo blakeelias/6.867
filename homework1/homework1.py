@@ -70,7 +70,14 @@ def regressionPlot(X, Y, order):
     pl.plot(pts, Yp.tolist()[0])
 
 def designMatrix(X, order):
-    return np.array([[x**i for i in range(order+1)] for x in X])
+    return np.array([[x[0]**i for i in range(order+1)] for x in X])
+
+def regressionFit(X, Y, phi):
+    print(phi)
+    print(phi.T)
+    a = pl.dot(phi.T, phi)
+    b = pl.dot(np.linalg.inv(a), phi.T)
+    return pl.dot(b, Y)
 
 def getData(name):
     data = pl.loadtxt(name)
@@ -114,7 +121,7 @@ if __name__ == '__main__':
     def negate(func):
         return lambda x: -func(x)
 
-    print('quadratic bowl:')
+    '''print('quadratic bowl:')
     z = gradientDescent(bowl, bowlGradient, np.array((3, 5)), 
         stopChange=0.00000001,
         stepRate=0.01,
@@ -136,5 +143,8 @@ if __name__ == '__main__':
 
 
     print numericalGradient(bowl, np.array((3.0, 5.0)), intervalWidth = 1e-10)
-    print bowlGradient(np.array((3.0, 5.0)))
+    print bowlGradient(np.array((3.0, 5.0)))'''
+
+    X, Y = bishopCurveData()
+    regressionPlot(X, Y, 0)
 
