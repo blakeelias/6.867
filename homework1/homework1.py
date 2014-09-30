@@ -5,6 +5,7 @@ from scipy.optimize import fmin_bfgs
 import numpy as np
 from matplotlib import pyplot
 
+# Problem 1
 def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, momentumWeight=0.1, verbose=False):
     lastChange = float('inf')
     prevGuess = guess
@@ -35,6 +36,7 @@ def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, mome
     print('Gradient evaluations: %d' % nGradCalls)
     return guess
 
+# Problem 1
 def numericalGradient(func, point, intervalWidth = 1e-3):
     def numericalDerivative(func, x, intervalWidth):
         return (func(x + 0.5 * intervalWidth) - \
@@ -51,6 +53,7 @@ def numericalGradient(func, point, intervalWidth = 1e-3):
             point[i], intervalWidth))
     return answer
 
+# Problem 2.1
 # X is an array of N data points (one dimensional for now), that is, NX1
 # Y is a Nx1 column vector of data values
 # order is the order of the highest order polynomial in the basis functions
@@ -70,9 +73,11 @@ def regressionPlot(X, Y, order):
     Yp = pl.dot(w.T, designMatrix(pts, order).T)
     pl.plot(pts, Yp.tolist()[0])
 
+# Problem 2.1
 def designMatrix(X, order):
     return np.array([[x[0]**i for i in range(order+1)] for x in X])
 
+# Problem 2.1
 def regressionFit(X, Y, phi):
     print(phi)
     print(phi.T)
