@@ -8,12 +8,16 @@ def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, mome
     lastChange = float('inf')
     prevGuess = guess
     funcVal = func(guess)
+
+    nFuncCalls = 1
+    nGradCalls = 0
     
     if verbose:
         print('guess, gradient, funcVal, lastChange')
 
     while lastChange > stopChange:
         g = gradient(guess)
+        nGradCalls += 1
         if verbose: print('%s, %s, %s, %s' % (guess, g, funcVal, lastChange))
 
         newGuess = guess - stepRate * g \
@@ -23,7 +27,11 @@ def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, mome
 
         lastFuncVal = funcVal
         funcVal = func(guess)
+        nFuncCalls += 1
         lastChange = abs(funcVal - lastFuncVal)
+    
+    print('Function evaluations: %d' % nFuncCalls)
+    print('Gradient evaluations: %d' % nGradCalls)
     return guess
 
 def numericalGradient(func, point, intervalWidth = 1e-3):
@@ -103,7 +111,7 @@ if __name__ == '__main__':
     def negate(func):
         return lambda x: -func(x)
 
-    '''print('quadratic bowl:')
+    print('quadratic bowl:')
     z = gradientDescent(bowl, bowlGradient, np.array((3, 5)), 
         stopChange=0.00000001,
         stepRate=0.01,
@@ -121,7 +129,7 @@ if __name__ == '__main__':
         stopChange = 1e-7,
         stepRate = 0.05,
         momentumWeight = 0.1))
-    print(fmin_bfgs(invertedGaussian, np.array((5)), invertedGaussianGradient))'''
+    print(fmin_bfgs(invertedGaussian, np.array((5)), invertedGaussianGradient))
 
 
     print numericalGradient(bowl, np.array((3.0, 5.0)), intervalWidth = 1e-10)
