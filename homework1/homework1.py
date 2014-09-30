@@ -69,6 +69,9 @@ def regressionPlot(X, Y, order):
     Yp = pl.dot(w.T, designMatrix(pts, order).T)
     pl.plot(pts, Yp.tolist()[0])
 
+def designMatrix(X, order):
+    return np.array([[x**i for i in range(order+1)] for x in X])
+
 def getData(name):
     data = pl.loadtxt(name)
     # Returns column matrices
