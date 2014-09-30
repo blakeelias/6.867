@@ -124,6 +124,6 @@ if __name__ == '__main__':
     print(fmin_bfgs(invertedGaussian, np.array((5)), invertedGaussianGradient))'''
 
 
-    print numericalGradient(bowl, np.array((3, 5)), intervalWidth = 1e-10)
-    print bowlGradient(np.array((3, 5)))
+    print numericalGradient(bowl, np.array((3.0, 5.0)), intervalWidth = 1e-10)
+    print bowlGradient(np.array((3.0, 5.0)))
 
