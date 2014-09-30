@@ -3,6 +3,7 @@ import random
 import pylab as pl
 from scipy.optimize import fmin_bfgs
 import numpy as np
+from matplotlib import pyplot
 
 def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, momentumWeight=0.1, verbose=False):
     lastChange = float('inf')
@@ -146,5 +147,6 @@ if __name__ == '__main__':
     print bowlGradient(np.array((3.0, 5.0)))'''
 
     X, Y = bishopCurveData()
-    regressionPlot(X, Y, 0)
-
+    for M in [0, 1, 3, 9]:
+        regressionPlot(X, Y, M)
+        pl.show()
