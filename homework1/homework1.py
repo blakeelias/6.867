@@ -12,8 +12,8 @@ def gradientDescent(func, gradient, guess, stopChange, stepRate, momentumWeight)
         g = gradient(guess)
         newGuess = guess - stepRate * g \
                    + momentumWeight*(guess - prevGuess)
-        guess = newGuess
         prevGuess = guess
+        guess = newGuess
         lastChange = np.linalg.norm(guess - prevGuess)
         print('%s, %s, %s' % (guess, g, lastChange))
     return guess
