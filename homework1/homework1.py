@@ -72,6 +72,7 @@ def regressionPlot(X, Y, order):
     pts = [[p] for p in pl.linspace(min(X), max(X), 100)]
     Yp = pl.dot(w.T, designMatrix(pts, order).T)
     pl.plot(pts, Yp.tolist()[0])
+    print('error: %f' % sumOfSquaresError(X, Y, phi, w))
 
 # Problem 2.1
 def designMatrix(X, order):
@@ -79,11 +80,21 @@ def designMatrix(X, order):
 
 # Problem 2.1
 def regressionFit(X, Y, phi):
-    print(phi)
-    print(phi.T)
+    #print(phi)
+    #print(phi.T)
     a = pl.dot(phi.T, phi)
     b = pl.dot(np.linalg.inv(a), phi.T)
     return pl.dot(b, Y)
+
+# Problem 2.2
+def sumOfSquaresError(X, Y, phi, w):
+    '''Given data points X, a vector Y of values, a feature (design) matrix phi,
+    and a weight vector w, compute the sum of squares error (SSE) and its derivative'''
+    Yp = pl.dot(w.T, phi.T)
+    print(Y.T)
+    print(Yp)
+    #print(Yp - Y)
+    return np.linalg.norm(Yp - Y.T)
 
 def getData(name):
     data = pl.loadtxt(name)
