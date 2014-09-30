@@ -4,7 +4,7 @@ import pylab as pl
 from scipy.optimize import fmin_bfgs
 import numpy as np
 
-def gradientDescent(func, gradient, guess, stopChange, stepRate, momentumWeight):
+def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, momentumWeight=0.1):
     lastChange = float('inf')
     prevGuess = guess
     print('guess, gradient, lastChange')
@@ -68,5 +68,8 @@ if __name__ == '__main__':
         a, b = x
         return np.array((2*a, 2*b))
 
-    z = gradientDescent(bowl, bowlGradient, np.array((3, 5)), 0.01, 0.01, 0.1)
+    z = gradientDescent(bowl, bowlGradient, np.array((3, 5)), 
+        stopChange=0.00000001,
+        stepRate=0.01,
+        momentumWeight=0.1)
     print(z)
