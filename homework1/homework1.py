@@ -94,7 +94,7 @@ def sumOfSquaresError(X, Y, phi, w):
     print(Y.T)
     print(Yp)
     #print(Yp - Y)
-    return np.linalg.norm(Yp - Y.T)
+    return np.linalg.norm(Yp - Y.T)**2
 
 def getData(name):
     data = pl.loadtxt(name)
