@@ -6,7 +6,7 @@ import numpy as np
 from matplotlib import pyplot
 
 # Problem 1
-def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, momentumWeight=0.1, verbose=False):
+def gradientDescent(func, gradient=None, guess=0, stopChange=0.001, stepRate=0.01, momentumWeight=0.1, verbose=False):
     print('performing gradient descent')
     #print('examining guess parameter, func takes inputs with %s component(s)' % len(guess))
     lastChange = float('inf')
@@ -15,6 +15,9 @@ def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, mome
 
     nFuncCalls = 1
     nGradCalls = 0
+
+    if gradient == None:
+        gradient = numericalGradient(func)
     
     if verbose:
         print('guess, gradient, funcVal, lastChange')
@@ -24,8 +27,13 @@ def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, mome
         nGradCalls += 1
         if verbose: print('%s, %s, %s, %s' % (guess, g, funcVal, lastChange))
 
-        newGuess = guess - stepRate * g \
-         + momentumWeight*(guess - prevGuess)
+        try:
+            newGuess = guess - stepRate * g \
+                + momentumWeight*(guess - prevGuess)
+        except Exception as e:
+            print(e)
+            print('guess, stepRate, g, momentumWeight, prevGuess:', guess, stepRate, g, momentumWeight, prevGuess)
+            break
         prevGuess = guess
         guess = newGuess
 
@@ -39,28 +47,34 @@ def gradientDescent(func, gradient, guess, stopChange=0.001, stepRate=0.01, mome
     return guess
 
 # Problem 1
-def numericalGradient(func, point, intervalWidth = 1e-3):
-    def numericalDerivative(func, x, intervalWidth):
-        high = func(x + 0.5 * intervalWidth)
-        low = func(x - 0.5 * intervalWidth)
-        return (high - low)/intervalWidth
+def numericalGradient(func, intervalWidth = 1e-3):
+    def gradient(point):
+        def numericalDerivative(func, x, intervalWidth):
+            high = func(x + 0.5 * intervalWidth)
+            low = func(x - 0.5 * intervalWidth)
+            return (high - low)/intervalWidth
 
-    answer = []
-    for i in range(len(point)):
-        def componentFunction(x):
-            newPoint = np.array(point)
-            newPoint[i] = x
-            #print('point, newPoint: %s, %s' % (point, newPoint))
-            val = func(newPoint)
-            #print('value at newPoint: %f' % val)
-            return val
-        answer.append(numericalDerivative(componentFunction, \
-            point[i], intervalWidth))
-    return answer
+        answer = []
+        for i in range(len(point)):
+            def componentFunction(x):
+                newPoint = np.array(point)
+                newPoint[i] = x
+                #print('point, newPoint: %s, %s' % (point, newPoint))
+                val = func(newPoint)
+                #print('value at newPoint: %f' % val)
+                return val
+            answer.append(numericalDerivative(componentFunction, \
+                point[i], intervalWidth))
+        return answer
+    return gradient
 
 # Problem 2.1
 def designMatrix(X, order, includeConstantTerm=True):
     return np.array([[x[0]**i for i in range(0 if includeConstantTerm else 1, order+1)] for x in X])
+    # okay because 0**0 == 1
+
+def linearDesignMatrix(X, includeConstantTerm=True):
+    return np.hstack((np.array([[1]] * len(X)), X))
 
 # Problem 2.1
 def regressionFit(X, Y, phi, params):
@@ -74,10 +88,15 @@ def regressionFit(X, Y, phi, params):
 # X is an array of N data points (one dimensional for now), that is, NX1
 # Y is a Nx1 column vector of data values
 # order is the order of the highest order polynomial in the basis functions
-def regressionPlot(X, Y, order, fitMethod=regressionFit, params={}):
-    print('X', X)
-    print('Y', Y)
-    pl.plot(X.T.tolist()[0],Y.T.tolist()[0], 'gs')
+def regressionPlot(X, Y, order, fitMethod=regressionFit, params={}, verbose=False, plot=True, validationData=None):
+    if verbose:
+        print('X', X)
+        print('Y', Y)
+    if plot:
+        pl.plot(X.T.tolist()[0],Y.T.tolist()[0], 'gs')
+        if validationData != None:
+            X_validate, Y_validate = validationData
+            pl.plot(X_validate.T.tolist()[0],Y_validate.T.tolist()[0], 'bo')
 
     # You will need to write the designMatrix and regressionFit function
 
@@ -86,18 +105,28 @@ def regressionPlot(X, Y, order, fitMethod=regressionFit, params={}):
     # compute the weight vector
     params['order'] = order
     w = fitMethod(X, Y, phi, params)
-    print 'w', w
+    
+    if verbose:
+        print 'w', w
 
     Y_estimated = pl.dot(w.T, phi.T)
-    print('Y_estimated', Y_estimated)
+    if verbose:
+        print('Y_estimated', Y_estimated)
     # produce a plot of the values of the function 
     pts = [[p] for p in pl.linspace(min(X), max(X), 100)]
-    Yp = pl.dot(w.T, designMatrix(pts, order).T)
-    pl.plot(pts, Yp.tolist()[0])
-    print('error: %f' % sumOfSquaresErrorGenerator(phi, Y)(w))
-    print('analytical error gradient: %s' % sumOfSquaresErrorGradientGenerator(phi, Y)(w))
-    print('numerical error gradient: %s' % \
-        numericalGradient(sumOfSquaresErrorGenerator(phi, Y), w, 1e-5))
+    Yp = applyWeights(pts, order, w)
+    if plot:
+        pl.plot(pts, Yp.tolist()[0])
+    error = sumOfSquaresErrorGenerator(phi, Y)(w)
+    return (error, w)
+    #print('error: %f' % error)
+    #print('analytical error gradient: %s' % sumOfSquaresErrorGradientGenerator(phi, Y)(w))
+    #print('numerical error gradient: %s' % \
+    #    numericalGradient(sumOfSquaresErrorGenerator(phi, Y), w, 1e-5))
+
+def applyWeights(X, order, weights):
+    phi = designMatrix(X, order)
+    return pl.dot(weights.T, phi.T)
 
 # Problem 2.2
 def sumOfSquaresErrorGenerator(phi, Y):
@@ -133,25 +162,48 @@ def gradientDescentFit(X, Y, phi, params):
         verbose=True)
 
 # Problem 3.1
-def ridgeFit(X, Y, phi, params):
+def ridgeFit(X, Y, phi, params, verbose=False):
     phi = designMatrix(X, params['order'], includeConstantTerm=False)
-    print('phi', phi)
     l = params['lambda']
     phi_avg = sum(phi)*1.0 / len(phi)
-    print('phi_avg', phi_avg)
     Z = phi - phi_avg
-    print('Z', Z)
     Y_avg = sum(Y)*1.0 / len(Y)
     Yc = Y - Y_avg
-    print('Yc', Yc)
+    if verbose:
+        print('phi', phi)
+        print('phi_avg', phi_avg)
+        print('Z', Z)
+        print('Yc', Yc)
 
     a = pl.dot(Z.T, Z) + l * pl.eye(len(Z.T))
     b = np.linalg.inv(a).dot(Z.T)
     W = b.dot(Yc)
     W_0 = np.array([Y_avg - W.T.dot(phi_avg)])
-    print('W_0', W_0)
-    print('W', W)
+    if verbose:
+        print('W_0', W_0)
+        print('W', W)
     return np.hstack((W_0, W.T)).T
+
+# Problem 3.2
+def modelSelection(trainingData, validationData, verbose=False):
+    X, Y = trainingData
+    X_validate, Y_validate = validationData
+    orderErrors = []
+    for M in range(9):
+        regularizationWeights = np.hstack((np.arange(0, 0.1, 0.01), np.arange(0.1, 1, 0.1), np.arange(1, 10, 1), np.arange(10, 100, 10), np.arange(100, 1000, 100), np.arange(1000, 10000, 1000)))
+        lambdaErrors = []
+        for l in regularizationWeights:
+            error, weights = regressionPlot(X, Y, M, ridgeFit, {'lambda': l}, plot=False)
+            validateError = sumOfSquaresErrorGenerator(designMatrix(X_validate, M), Y_validate)(weights)
+            lambdaErrors.append((validateError, l, weights))
+        (error, l, weights) = min(lambdaErrors)
+        if verbose:
+            print(M, l, error, weights)
+        orderErrors.append((error, M, l, weights))
+    model = min(orderErrors)
+    if verbose:
+        print('optimal: (error, M, l, weights) = ', model)
+    regressionPlot(X, Y, M, fitMethod=regressionFit, params={'lambda': l}, verbose=verbose, plot=True, validationData=(X_validate, Y_validate))
 
 def getData(name):
     data = pl.loadtxt(name)
@@ -173,7 +225,12 @@ def regressBData():
 def validateData():
     return getData('regress_validate.txt')
 
+# Problem 3.3
+def blogTrainData():
+    return pl.loadtxt('dataset/x_train.csv', delimiter=',')
 
+def blogValidateData():
+    return pl.loadtxt('dataset/x_val.csv', delimiter=',')
 
 if __name__ == '__main__':
     '''def bowl(x):
@@ -219,19 +276,5 @@ if __name__ == '__main__':
     print numericalGradient(bowl, np.array((3.0, 5.0)), intervalWidth = 1e-10)
     print bowlGradient(np.array((3.0, 5.0)))'''
 
-    X, Y = bishopCurveData()
-    #X = np.array([[1], [2], [3], [4]])
-    #Y = np.array([[2], [3], [6], [9]])
-    for M in [0, 1, 3, 9]:
-        #regressionPlot(X, Y, M, regressionFit)
-        #regressionPlot(X, Y, M, gradientDescentFit)
-        regressionPlot(X, Y, M, ridgeFit, {'lambda': 0.00001})
-        pl.show()
-        print('-'*30)
-    '''X, Y = regressBData()
-    for M in [1, 3, 9]:
-        #regressionPlot(X, Y, M, regressionFit)
-        #regressionPlot(X, Y, M, gradientDescentFit)
-        regressionPlot(X, Y, M, ridgeFit, {'lambda': 0.00001})
-        pl.show()
-        print('-'*30)'''
+    modelSelection(regressAData(), validateData(), verbose=True)
+    modelSelection(regressBData(), validateData(), verbose=True)
