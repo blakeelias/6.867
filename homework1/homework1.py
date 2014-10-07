@@ -121,6 +121,7 @@ def regressionPlot(X, Y, order, fitMethod=regressionFit, params={}, verbose=Fals
     Yp = applyWeights(pts, order, w)
     if plot:
         pl.plot(pts, Yp.tolist()[0])
+        pl.show()
     error = sumOfSquaresErrorGenerator(phi, Y)(w)
     return (error, w)
     #print('error: %f' % error)
@@ -189,25 +190,31 @@ def ridgeFit(X, Y, phi, params, verbose=False):
     return np.hstack((W_0, W.T)).T
 
 # Problem 3.2
-def modelSelection(trainingData, validationData, verbose=False):
+def modelSelection(trainingData, validationData, regressionPlotMethod=regressionPlot, fitMethod=ridgeFit, verbose=False):
     X, Y = trainingData
     X_validate, Y_validate = validationData
     orderErrors = []
-    for M in range(9):
+    for M in range(1, 9):
+        print('trying M = %d' % M)
         regularizationWeights = np.hstack((np.arange(0, 0.1, 0.01), np.arange(0.1, 1, 0.1), np.arange(1, 10, 1), np.arange(10, 100, 10), np.arange(100, 1000, 100), np.arange(1000, 10000, 1000)))
         lambdaErrors = []
         for l in regularizationWeights:
-            error, weights = regressionPlot(X, Y, M, ridgeFit, {'lambda': l}, plot=False)
+            print('trying lambda = %f' % l)
+            error, weights = regressionPlotMethod(X, Y, M, fitMethod, {'lambda': l}, plot=False, verbose=verbose)
             validateError = sumOfSquaresErrorGenerator(designMatrix(X_validate, M), Y_validate)(weights)
             lambdaErrors.append((validateError, l, weights))
+            if verbose:
+                print('validateError, ', validateError)
         (error, l, weights) = min(lambdaErrors)
         if verbose:
-            print(M, l, error, weights)
+            print('M, l, error, weights:', M, l, error, weights)
         orderErrors.append((error, M, l, weights))
     model = min(orderErrors)
+    error, M, l, weights = model
     if verbose:
         print('optimal: (error, M, l, weights) = ', model)
-    regressionPlot(X, Y, M, fitMethod=regressionFit, params={'lambda': l}, verbose=verbose, plot=True, validationData=(X_validate, Y_validate))
+    regressionPlotMethod(X, Y, M, fitMethod=fitMethod, params={'lambda': l}, verbose=verbose, plot=True, validationData=(X_validate, Y_validate))
+    return model
 
 def getData(name):
     data = pl.loadtxt(name)
@@ -243,6 +250,7 @@ def blogValidateData():
 def blogTestData():
     return getDataCSV('dataset/x_test.csv', 'dataset/y_test.csv')
 
+# Problem 3.3
 def blogRegression(X, Y, fitMethod=ridgeFit, params={}, verbose=False, validationData=None):
     if verbose:
         print('X', X)
@@ -282,6 +290,80 @@ def blogModelSelection(trainingData, validationData, verbose=False):
             print('lambda = %f, error = %f' % (l, validateError))
     (error, l) = min(lambdaErrors) # (error, l, weights) = 
     return (error, l)
+
+# Problem 4.1
+# X is an array of N data points (one dimensional for now), that is, NX1
+# Y is a Nx1 column vector of data values
+# order is the order of the highest order polynomial in the basis functions
+def LADRegressionPlot(X, Y, order, fitMethod=regressionFit, params={}, verbose=False, plot=True, validationData=None):
+    if verbose:
+        print('X', X)
+        print('Y', Y)
+    if plot:
+        pl.plot(X.T.tolist()[0],Y.T.tolist()[0], 'gs')
+        if validationData != None:
+            X_validate, Y_validate = validationData
+            pl.plot(X_validate.T.tolist()[0],Y_validate.T.tolist()[0], 'bo')
+
+    # You will need to write the designMatrix and regressionFit function
+
+    # constuct the design matrix (Bishop 3.16), the 0th column is just 1s.
+    phi = designMatrix(X, order)
+    # compute the weight vector
+    params['order'] = order
+    w = fitMethod(X, Y, phi, params)
+    
+    if verbose:
+        print 'w', w
+    try:
+        Y_estimated = pl.dot(w.T, phi.T)
+    except:
+        print('matrices not aligned: ', w.T.size, phi.T.size)
+    if verbose:
+        print('Y_estimated', Y_estimated)
+    # produce a plot of the values of the function 
+    pts = [[p] for p in pl.linspace(min(X), max(X), 100)]
+    Yp = np.array([applyWeights(pts, order, w)])
+    if plot:
+        pl.plot(pts, Yp.tolist()[0])
+        pl.show()
+    error = sumOfSquaresErrorGenerator(phi, Y)(w)
+    return (error, w)
+    #print('error: %f' % error)
+    #print('analytical error gradient: %s' % sumOfSquaresErrorGradientGenerator(phi, Y)(w))
+    #print('numerical error gradient: %s' % \
+    #    numericalGradient(sumOfSquaresErrorGenerator(phi, Y), w, 1e-5))
+
+
+# Problem 4.1
+def LADErrorGenerator(phi, Y):
+    def sumOfAbsError(w):
+        '''Given data points X, a vector Y of values, a feature (design) matrix phi,
+        and a weight vector w, compute the sum of squares error (SSE)'''
+        try:
+            Yp = pl.dot(w.T, phi.T)
+        except:
+            print('matrices not aligned: ', w.T.shape, phi.T.shape)
+            print('w.T', w.T)
+            print('phi.T', phi.T)
+        #print(Y.T)
+        #print(Yp)
+        #print(Yp - Y)
+        return np.linalg.norm(Yp - Y.T)
+    return sumOfAbsError
+
+# Problem 4.1
+def LADFit(X, Y, phi, params):
+    func = LADErrorGenerator(phi, Y)
+    #grad = sumOfSquaresErrorGradientGenerator(phi, Y)
+    guess = np.array([[0]]*len(phi[0]))
+    print(guess)
+    print(func(guess))
+    #print(grad(guess))
+    print('--- running gradient descent ---')
+    x = fmin_bfgs(func, guess)
+    print('--- finished gradient descent ---')
+    return x
 
 if __name__ == '__main__':
     '''def bowl(x):
@@ -327,11 +409,26 @@ if __name__ == '__main__':
     print numericalGradient(bowl, np.array((3.0, 5.0)), intervalWidth = 1e-10)
     print bowlGradient(np.array((3.0, 5.0)))'''
 
+    # problem 3.2:
     #modelSelection(regressAData(), validateData(), verbose=True)
     #modelSelection(regressBData(), validateData(), verbose=True)
 
+    
+
+    # problem 3.3
     #X, Y = blogTrainData()
     #print(blogRegressionPlot(X, Y, params={'lambda': 0.000001}, plot=False))
-    print(blogModelSelection(blogTrainData(), blogValidateData(), verbose=True))
+    
+    #print(blogModelSelection(blogTrainData(), blogValidateData(), verbose=True))
+
+    # problem 4
+    print('model', modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=LADFit, verbose=False))
+
+
+
+
+
+
+
 
 
