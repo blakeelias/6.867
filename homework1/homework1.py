@@ -74,7 +74,9 @@ def designMatrix(X, order, includeConstantTerm=True):
     # okay because 0**0 == 1
 
 def linearDesignMatrix(X, includeConstantTerm=True):
-    return np.hstack((np.array([[1]] * len(X)), X))
+    if includeConstantTerm:
+        return np.hstack((np.array([[1]] * len(X)), X))
+    return X
 
 # Problem 2.1
 def regressionFit(X, Y, phi, params):
@@ -108,8 +110,10 @@ def regressionPlot(X, Y, order, fitMethod=regressionFit, params={}, verbose=Fals
     
     if verbose:
         print 'w', w
-
-    Y_estimated = pl.dot(w.T, phi.T)
+    try:
+        Y_estimated = pl.dot(w.T, phi.T)
+    except:
+        print('matrices not aligned: ', w.T.size, phi.T.size)
     if verbose:
         print('Y_estimated', Y_estimated)
     # produce a plot of the values of the function 
@@ -163,7 +167,7 @@ def gradientDescentFit(X, Y, phi, params):
 
 # Problem 3.1
 def ridgeFit(X, Y, phi, params, verbose=False):
-    phi = designMatrix(X, params['order'], includeConstantTerm=False)
+    #phi = designMatrix(X, params['order'], includeConstantTerm=False)
     l = params['lambda']
     phi_avg = sum(phi)*1.0 / len(phi)
     Z = phi - phi_avg
@@ -226,11 +230,58 @@ def validateData():
     return getData('regress_validate.txt')
 
 # Problem 3.3
+def getDataCSV(xName, yName):
+    return (pl.loadtxt(xName, delimiter=','), np.array([pl.loadtxt(yName, delimiter=',')]).T)
+
+
 def blogTrainData():
-    return pl.loadtxt('dataset/x_train.csv', delimiter=',')
+    return getDataCSV('dataset/x_train.csv', 'dataset/y_train.csv')
 
 def blogValidateData():
-    return pl.loadtxt('dataset/x_val.csv', delimiter=',')
+    return getDataCSV('dataset/x_val.csv', 'dataset/y_val.csv')
+
+def blogTestData():
+    return getDataCSV('dataset/x_test.csv', 'dataset/y_test.csv')
+
+def blogRegression(X, Y, fitMethod=ridgeFit, params={}, verbose=False, validationData=None):
+    if verbose:
+        print('X', X)
+        print('Y', Y)
+
+    phi = linearDesignMatrix(X, includeConstantTerm=False)
+    # compute the weight vector
+    w = fitMethod(X, Y, phi, params)
+    
+    if verbose:
+        print 'w', w
+
+    phi = linearDesignMatrix(X, includeConstantTerm=True)
+    try:
+        Y_estimated = pl.dot(w.T, phi.T)
+    except:
+        print('matrices not aligned: ', w.T.shape, phi.T.shape)
+    #Y_estimated = pl.dot(w.T, phi.T)
+    if verbose:
+        print('Y_estimated', Y_estimated)
+    
+    error = sumOfSquaresErrorGenerator(phi, Y)(w)
+    return (error, w)
+
+# Problem 3.3
+def blogModelSelection(trainingData, validationData, verbose=False):
+    X, Y = trainingData
+    X_validate, Y_validate = validationData
+    #regularizationWeights = [1e2, 1e3, 1e4, 1e5, 1e6, 1e7] #np.hstack((np.arange(0.01, 0.1, 0.01), np.arange(0.1, 1, 0.1), np.arange(1, 10, 1), np.arange(10, 100, 10), np.arange(100, 1000, 100), np.arange(1000, 10000, 1000)))
+    regularizationWeights = np.arange(31600, 31800, 10)
+    lambdaErrors = []
+    for l in regularizationWeights:
+        error, weights = blogRegression(X, Y, ridgeFit, {'lambda': l})
+        validateError = sumOfSquaresErrorGenerator(linearDesignMatrix(X_validate), Y_validate)(weights)
+        lambdaErrors.append((validateError, l)) #, weights))
+        if verbose:
+            print('lambda = %f, error = %f' % (l, validateError))
+    (error, l) = min(lambdaErrors) # (error, l, weights) = 
+    return (error, l)
 
 if __name__ == '__main__':
     '''def bowl(x):
@@ -276,5 +327,11 @@ if __name__ == '__main__':
     print numericalGradient(bowl, np.array((3.0, 5.0)), intervalWidth = 1e-10)
     print bowlGradient(np.array((3.0, 5.0)))'''
 
-    modelSelection(regressAData(), validateData(), verbose=True)
-    modelSelection(regressBData(), validateData(), verbose=True)
+    #modelSelection(regressAData(), validateData(), verbose=True)
+    #modelSelection(regressBData(), validateData(), verbose=True)
+
+    #X, Y = blogTrainData()
+    #print(blogRegressionPlot(X, Y, params={'lambda': 0.000001}, plot=False))
+    print(blogModelSelection(blogTrainData(), blogValidateData(), verbose=True))
+
+
