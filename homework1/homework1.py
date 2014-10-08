@@ -194,12 +194,13 @@ def modelSelection(trainingData, validationData, regressionPlotMethod=regression
     X, Y = trainingData
     X_validate, Y_validate = validationData
     orderErrors = []
-    for M in range(1, 9):
-        print('trying M = %d' % M)
-        regularizationWeights = np.hstack((np.arange(0, 0.1, 0.01), np.arange(0.1, 1, 0.1), np.arange(1, 10, 1), np.arange(10, 100, 10), np.arange(100, 1000, 100), np.arange(1000, 10000, 1000)))
+    for M in range(0, 6):
+        #print('trying M = %d' % M)
+        #regularizationWeights = np.hstack((np.arange(0, 0.1, 0.01), np.arange(0.1, 1, 0.1), np.arange(1, 10, 1), np.arange(10, 100, 10), np.arange(100, 1000, 100), np.arange(1000, 10000, 1000)))
+        regularizationWeights = [10.0**i for i in range(-5, 10)]
         lambdaErrors = []
         for l in regularizationWeights:
-            print('trying lambda = %f' % l)
+            #print('trying lambda = %f' % l)
             error, weights = regressionPlotMethod(X, Y, M, fitMethod, {'lambda': l}, plot=False, verbose=verbose)
             validateError = sumOfSquaresErrorGenerator(designMatrix(X_validate, M), Y_validate)(weights)
             lambdaErrors.append((validateError, l, weights))
@@ -357,6 +358,36 @@ def LADFit(X, Y, phi, params):
     func = LADErrorGenerator(phi, Y, params['lambda'])
     #grad = sumOfSquaresErrorGradientGenerator(phi, Y)
     guess = np.array([[0]]*len(phi[0]))
+    #print('guess', guess)
+    #print('func(guess)', func(guess))
+    #print(grad(guess))
+    #print('--- running gradient descent ---')
+    x = fmin_bfgs(func, guess)
+    #print('--- finished gradient descent ---')
+    return x
+
+# Problem 4.1
+def lassoErrorGenerator(phi, Y, l):
+    def lassoError(w):
+        '''Given data points X, a vector Y of values, a feature (design) matrix phi,
+        and a weight vector w, compute the lasso error'''
+        try:
+            Yp = pl.dot(w.T, phi.T)
+        except:
+            print('matrices not aligned: ', w.T.shape, phi.T.shape)
+            print('w.T', w.T)
+            print('phi.T', phi.T)
+        #print(Y.T)
+        #print(Yp)
+        #print(Yp - Y)
+        return np.linalg.norm(Yp - Y.T)**2 + l*sum(abs(w))
+    return lassoError
+
+# Problem 4.2
+def lassoFit(X, Y, phi, params):
+    func = lassoErrorGenerator(phi, Y, params['lambda'])
+    #grad = sumOfSquaresErrorGradientGenerator(phi, Y)
+    guess = np.array([[0]]*len(phi[0]))
     print('guess', guess)
     print('func(guess)', func(guess))
     #print(grad(guess))
@@ -422,12 +453,16 @@ if __name__ == '__main__':
     #print(blogModelSelection(blogTrainData(), blogValidateData(), verbose=True))
 
     # problem 4.1
-    print('LAD model', modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=LADFit, verbose=False))
+    ladModel1 = modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=LADFit, verbose=False)
+    ladModel2 = modelSelection(regressBData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=LADFit, verbose=False)
     # problem 4.2
-    #print('Lasso model', modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=lassoFit, verbose=False))
+    lassoModel1 = modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=lassoFit, verbose=False)
+    lassoModel2 = modelSelection(regressBData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=lassoFit, verbose=False)
 
-
-
+    print('ladModel1', ladModel1)
+    print('ladModel2', ladModel2)
+    print('lassoModel1', lassoModel1)
+    print('lassoModel2', lassoModel2)
 
 
 
