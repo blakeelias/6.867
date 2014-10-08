@@ -4,6 +4,7 @@ import pylab as pl
 from scipy.optimize import fmin_bfgs
 import numpy as np
 from matplotlib import pyplot
+from math import sin
 
 # Problem 1
 def gradientDescent(func, gradient=None, guess=0, stopChange=0.001, stepRate=0.01, momentumWeight=0.1, verbose=False):
@@ -123,11 +124,12 @@ def regressionPlot(X, Y, order, fitMethod=regressionFit, params={}, verbose=Fals
         pl.plot(pts, Yp.tolist()[0])
         pl.show()
     error = sumOfSquaresErrorGenerator(phi, Y)(w)
-    return (error, w)
+    
     #print('error: %f' % error)
-    #print('analytical error gradient: %s' % sumOfSquaresErrorGradientGenerator(phi, Y)(w))
-    #print('numerical error gradient: %s' % \
-    #    numericalGradient(sumOfSquaresErrorGenerator(phi, Y), w, 1e-5))
+    print('analytical error gradient: %s' % sumOfSquaresErrorGradientGenerator(phi, Y)(w))
+    print('numerical error gradient: %s' % \
+        numericalGradient(sumOfSquaresErrorGenerator(phi, Y), 1e-5)(w))
+    return (error, w)
 
 def applyWeights(X, order, weights):
     phi = designMatrix(X, order)
@@ -163,8 +165,20 @@ def gradientDescentFit(X, Y, phi, params):
 
     return gradientDescent(sumOfSquaresErrorGenerator(phi, Y), \
         sumOfSquaresErrorGradientGenerator(phi, Y), \
-        np.array([0]*len(X[0])).T, \
-        verbose=True)
+        np.array([[0]]*len(phi[0])), \
+        verbose=True,
+        stopChange=0.00001,
+        stepRate=0.02)
+
+def problem2():
+    #for M in [0, 1, 3, 9]:
+    #    X, Y = bishopCurveData()
+    #    regressionPlot(X, Y, M, fitMethod=regressionFit, params={}, verbose=False, plot=True, validationData=None)
+
+    for M in [0, 1, 3, 9]:
+        X, Y = bishopCurveData()
+        regressionPlot(X, Y, M, fitMethod=gradientDescentFit, params={}, verbose=False, plot=True, validationData=None)
+        print('order %d plotted' % M)
 
 # Problem 3.1
 def ridgeFit(X, Y, phi, params, verbose=False):
@@ -397,15 +411,19 @@ def lassoFit(X, Y, phi, params):
     return x
 
 if __name__ == '__main__':
-    '''def bowl(x):
+    def bowl(x):
         a, b = x
         return a*a + b*b
+
+    def sinBowl(x):
+        a, b = x
+        return sin(a*a + b*b)
 
     def bowlGradient(x):
         a, b = x
         return np.array((2*a, 2*b))
 
-    def makeGaussian(mean, variance):
+    '''def makeGaussian(mean, variance):
         def gaussian(x):
             return 1 / np.sqrt(2 * np.pi * variance) * \
                 np.exp(- (x - mean)**2 / (2 * variance))
@@ -414,17 +432,30 @@ if __name__ == '__main__':
         return gaussian, gradient
 
     def negate(func):
-        return lambda x: -func(x)
+        return lambda x: -func(x)'''
 
-    print('quadratic bowl:')
-    z = gradientDescent(bowl, bowlGradient, np.array((3, 5)), 
-        stopChange=0.00000001,
-        stepRate=0.01,
-        momentumWeight=0.1)
+    '''print('quadratic bowl:')
+    z = gradientDescent(bowl, bowlGradient, np.array((3.0, 5.0)), 
+        stopChange=0.00001,
+        stepRate=0.3,
+        momentumWeight=0.0)
     print(z)
     print('scipy.optimize.fmin_bfgs: ')
-    print(fmin_bfgs(bowl, np.array((3, 5)), bowlGradient))
-    print('-'*60)
+    print(fmin_bfgs(bowl, np.array((307, 592)), bowlGradient))'''
+
+    '''z = gradientDescent(sinBowl, gradient=None, guess=np.array((3.0, 5.0)), 
+        stopChange=0.00001,
+        stepRate=0.05,
+        momentumWeight=0.0)
+    print(z)
+
+    z = gradientDescent(sinBowl, gradient=None, guess=np.array((0.25, 0.25)), 
+        stopChange=0.00001,
+        stepRate=0.05,
+        momentumWeight=0.0)'''
+
+
+    '''print('-'*60)
     print('inverted gaussian:')
 
     gaussian, gaussianGradient = makeGaussian(10, 4)
@@ -434,13 +465,15 @@ if __name__ == '__main__':
         stopChange = 1e-7,
         stepRate = 0.05,
         momentumWeight = 0.1))
-    print(fmin_bfgs(invertedGaussian, np.array((5)), invertedGaussianGradient))
+    print(fmin_bfgs(invertedGaussian, np.array((5)), invertedGaussianGradient))'''
 
 
-    print numericalGradient(bowl, np.array((3.0, 5.0)), intervalWidth = 1e-10)
-    print bowlGradient(np.array((3.0, 5.0)))'''
+    #print numericalGradient(bowl, intervalWidth = 1e-10)(np.array((3.0, 5.0)))
+    #print bowlGradient(np.array((3.0, 5.0)))
 
-    # problem 3.2:
+    problem2()
+
+    '''# problem 3.2:
     #modelSelection(regressAData(), validateData(), verbose=True)
     #modelSelection(regressBData(), validateData(), verbose=True)
 
@@ -467,7 +500,7 @@ if __name__ == '__main__':
     print('lassoModel1', lassoModel1)
     print('lassoModel2', lassoModel2)
     print('blogLAD', blogLAD)
-    print('blogLasso', blogLasso)
+    print('blogLasso', blogLasso)'''
 
 
 
