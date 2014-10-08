@@ -336,7 +336,7 @@ def LADRegressionPlot(X, Y, order, fitMethod=regressionFit, params={}, verbose=F
 
 
 # Problem 4.1
-def LADErrorGenerator(phi, Y):
+def LADErrorGenerator(phi, Y, l):
     def sumOfAbsError(w):
         '''Given data points X, a vector Y of values, a feature (design) matrix phi,
         and a weight vector w, compute the sum of squares error (SSE)'''
@@ -349,16 +349,16 @@ def LADErrorGenerator(phi, Y):
         #print(Y.T)
         #print(Yp)
         #print(Yp - Y)
-        return np.linalg.norm(Yp - Y.T)
+        return sum(sum(abs(Yp - Y.T))) + l*np.linalg.norm(w)**2
     return sumOfAbsError
 
 # Problem 4.1
 def LADFit(X, Y, phi, params):
-    func = LADErrorGenerator(phi, Y)
+    func = LADErrorGenerator(phi, Y, params['lambda'])
     #grad = sumOfSquaresErrorGradientGenerator(phi, Y)
     guess = np.array([[0]]*len(phi[0]))
-    print(guess)
-    print(func(guess))
+    print('guess', guess)
+    print('func(guess)', func(guess))
     #print(grad(guess))
     print('--- running gradient descent ---')
     x = fmin_bfgs(func, guess)
@@ -421,9 +421,10 @@ if __name__ == '__main__':
     
     #print(blogModelSelection(blogTrainData(), blogValidateData(), verbose=True))
 
-    # problem 4
-    print('model', modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=LADFit, verbose=False))
-
+    # problem 4.1
+    print('LAD model', modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=LADFit, verbose=False))
+    # problem 4.2
+    #print('Lasso model', modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=lassoFit, verbose=False))
 
 
 
