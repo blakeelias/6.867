@@ -277,14 +277,14 @@ def blogRegression(X, Y, fitMethod=ridgeFit, params={}, verbose=False, validatio
     return (error, w)
 
 # Problem 3.3
-def blogModelSelection(trainingData, validationData, verbose=False):
+def blogModelSelection(trainingData, validationData, fitMethod=ridgeFit, verbose=False):
     X, Y = trainingData
     X_validate, Y_validate = validationData
     #regularizationWeights = [1e2, 1e3, 1e4, 1e5, 1e6, 1e7] #np.hstack((np.arange(0.01, 0.1, 0.01), np.arange(0.1, 1, 0.1), np.arange(1, 10, 1), np.arange(10, 100, 10), np.arange(100, 1000, 100), np.arange(1000, 10000, 1000)))
     regularizationWeights = np.arange(31600, 31800, 10)
     lambdaErrors = []
     for l in regularizationWeights:
-        error, weights = blogRegression(X, Y, ridgeFit, {'lambda': l})
+        error, weights = blogRegression(X, Y, fitMethod=fitMethod, params={'lambda': l})
         validateError = sumOfSquaresErrorGenerator(linearDesignMatrix(X_validate), Y_validate)(weights)
         lambdaErrors.append((validateError, l)) #, weights))
         if verbose:
@@ -459,12 +459,15 @@ if __name__ == '__main__':
     lassoModel1 = modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=lassoFit, verbose=False)
     lassoModel2 = modelSelection(regressBData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=lassoFit, verbose=False)
 
+    blogLAD = blogModelSelection(blogTrainData(), blogValidateData(), fitMethod=LADFit, verbose=False)
+    blogLasso = blogModelSelection(blogTrainData(), blogValidateData(), fitMethod=lassoFit, verbose=False)
+
     print('ladModel1', ladModel1)
     print('ladModel2', ladModel2)
     print('lassoModel1', lassoModel1)
     print('lassoModel2', lassoModel2)
-
-
+    print('blogLAD', blogLAD)
+    print('blogLasso', blogLasso)
 
 
 
