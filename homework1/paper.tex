@@ -37,6 +37,8 @@ PLOTS 1-4 HERE
 
 When calculating the gradient of the error of these models (evaluated on $w$, the vector of weights), both the analytical function and the numerical gradient function return very similar answers - close to 0. We expect the values to be almost the same, and it makes sense for them both to be close to 0 because the weights were chosen to minimize the error. For examle, in plot number 2 above, the analytically calculated error gradient was (1.33226763e-15, 1.11022302e-15), while the numerically calculated gradient was (4.4408920985006255e-11, 0.0).
 
+Setting the step size to 0.01 or 0.02 allows the gradient descent to converge; setting it to 0.1 causes it to wildly diverge. Setting the convergence criterion to $10^{-3}$ causes the algorithm to converge pretty quickly though the fit is not very good. A convergence criterion of $10^{-5}$, however, takes longer but produces a much better fit. PyLab's \texttt{fmin\_bfgs} converges very quickly and produces a good fit.
+
 \section{Ridge Regression}
 
 
