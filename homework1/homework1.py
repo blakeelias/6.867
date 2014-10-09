@@ -471,21 +471,21 @@ if __name__ == '__main__':
     #print numericalGradient(bowl, intervalWidth = 1e-10)(np.array((3.0, 5.0)))
     #print bowlGradient(np.array((3.0, 5.0)))
 
-    problem2()
+    #problem2()
 
-    '''# problem 3.2:
+    # problem 3.2:
     #modelSelection(regressAData(), validateData(), verbose=True)
     #modelSelection(regressBData(), validateData(), verbose=True)
 
     
 
     # problem 3.3
-    #X, Y = blogTrainData()
-    #print(blogRegressionPlot(X, Y, params={'lambda': 0.000001}, plot=False))
+    X, Y = blogTrainData()
+    #print(blogRegression(X, Y, params={'lambda': 0.000001}))
     
-    #print(blogModelSelection(blogTrainData(), blogValidateData(), verbose=True))
+    print(blogModelSelection(blogTrainData(), blogValidateData(), verbose=True))
 
-    # problem 4.1
+    '''# problem 4.1
     ladModel1 = modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=LADFit, verbose=False)
     ladModel2 = modelSelection(regressBData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=LADFit, verbose=False)
     # problem 4.2
