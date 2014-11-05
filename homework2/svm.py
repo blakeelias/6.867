@@ -85,7 +85,7 @@ def svmMultipliers(x, y, slackTightness):
                         sum([mult[i] * y[i]
                             for i in range(len(mult))])})
 
-    x0 = np.random.randn(len(x[0]))
+    x0 = np.random.randn(len(x))
     res_cons = optimize.minimize(objectiveFunction,x0,jac=jacobian,constraints=constraints,
         method='SLSQP',options={'disp':False})
 
@@ -130,7 +130,7 @@ class TestSVM(unittest.TestCase):
 def main():
     x = [(1, 2), (2, 2), (0, 0), (-2, 3)]
     y = [1, 1, -1, -1]
-    classifier = svm(map(lambda xx: np.array(xx), x), y, 10)
+    classifier = svm(map(lambda xx: np.array(xx), x), y, 1000)
     print(classifier(np.array((10, 10))))
     print(classifier(np.array((-10, -10))))
 
