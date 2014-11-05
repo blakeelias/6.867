@@ -210,8 +210,9 @@ def modelSelection(trainingData, validationData, regressionPlotMethod=regression
     orderErrors = []
     for M in range(0, 6):
         #print('trying M = %d' % M)
-        #regularizationWeights = np.hstack((np.arange(0, 0.1, 0.01), np.arange(0.1, 1, 0.1), np.arange(1, 10, 1), np.arange(10, 100, 10), np.arange(100, 1000, 100), np.arange(1000, 10000, 1000)))
-        regularizationWeights = [10.0**i for i in range(-5, 10)]
+        i = 0
+        regularizationWeights = np.hstack((np.arange(0, 0.1, 0.01), np.arange(0.1, 1, 0.1), np.arange(1, 10, 1), np.arange(10, 100, 10), np.arange(100, 1000, 100), np.arange(1000, 10000, 1000)))
+        #regularizationWeights = [10.0**i for i in range(-5, 10)]
         lambdaErrors = []
         for l in regularizationWeights:
             #print('trying lambda = %f' % l)
@@ -220,6 +221,7 @@ def modelSelection(trainingData, validationData, regressionPlotMethod=regression
             lambdaErrors.append((validateError, l, weights))
             if verbose:
                 print('validateError, ', validateError)
+            i += 1
         (error, l, weights) = min(lambdaErrors)
         if verbose:
             print('M, l, error, weights:', M, l, error, weights)
@@ -364,7 +366,7 @@ def LADErrorGenerator(phi, Y, l):
         #print(Y.T)
         #print(Yp)
         #print(Yp - Y)
-        return sum(sum(abs(Yp - Y.T))) + l*np.linalg.norm(w)**2
+        return sum(sum(abs(Yp - Y.T))) + l*np.linalg.norm(w[1:])**2
     return sumOfAbsError
 
 # Problem 4.1
@@ -394,7 +396,7 @@ def lassoErrorGenerator(phi, Y, l):
         #print(Y.T)
         #print(Yp)
         #print(Yp - Y)
-        return np.linalg.norm(Yp - Y.T)**2 + l*sum(abs(w))
+        return np.linalg.norm(Yp - Y.T)**2 + l*sum(abs(w[1:]))
     return lassoError
 
 # Problem 4.2
@@ -480,27 +482,27 @@ if __name__ == '__main__':
     
 
     # problem 3.3
-    X, Y = blogTrainData()
+    #X, Y = blogTrainData()
     #print(blogRegression(X, Y, params={'lambda': 0.000001}))
     
-    print(blogModelSelection(blogTrainData(), blogValidateData(), verbose=True))
+    #print(blogModelSelection(blogTrainData(), blogValidateData(), verbose=True))
 
-    '''# problem 4.1
+    # problem 4.1
     ladModel1 = modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=LADFit, verbose=False)
     ladModel2 = modelSelection(regressBData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=LADFit, verbose=False)
     # problem 4.2
     lassoModel1 = modelSelection(regressAData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=lassoFit, verbose=False)
     lassoModel2 = modelSelection(regressBData(), validateData(), regressionPlotMethod=LADRegressionPlot, fitMethod=lassoFit, verbose=False)
 
-    blogLAD = blogModelSelection(blogTrainData(), blogValidateData(), fitMethod=LADFit, verbose=False)
-    blogLasso = blogModelSelection(blogTrainData(), blogValidateData(), fitMethod=lassoFit, verbose=False)
+    #blogLAD = blogModelSelection(blogTrainData(), blogValidateData(), fitMethod=LADFit, verbose=False)
+    #blogLasso = blogModelSelection(blogTrainData(), blogValidateData(), fitMethod=lassoFit, verbose=False)
 
     print('ladModel1', ladModel1)
     print('ladModel2', ladModel2)
     print('lassoModel1', lassoModel1)
     print('lassoModel2', lassoModel2)
-    print('blogLAD', blogLAD)
-    print('blogLasso', blogLasso)'''
+    #print('blogLAD', blogLAD)
+    #print('blogLasso', blogLasso)
 
 
 
