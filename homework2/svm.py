@@ -14,10 +14,13 @@ def svm(x, y, slackTightness):
     keep all of the points on the appropriate side of the margin.'''
 
     multipliers = svmMultipliers(x, y, slackTightness)
+    print('slackTightness', slackTightness)
+    print('multipliers', multipliers)
     w = svmWeights(x, y, multipliers)
     M = [i
         for i in range(len(multipliers))
         if 0 < multipliers[i] < slackTightness]
+    print('M', M)
 
     S = [i
         for i in range(len(multipliers))
@@ -66,24 +69,22 @@ def svmMultipliers(x, y, slackTightness):
     print('x', x)
     print('len(x)', len(x))
     def objectiveFunction(multipliers):
-        return sum(multipliers) - 0.5 * sum([
+        return -1*(sum(multipliers) - 0.5 * sum([
             sum([
                 multipliers[i]*multipliers[j]*y[i]*y[j]*(x[i].dot(x[j]))
                 for j in range(len(x))])
-            for i in range(len(x))])
+            for i in range(len(x))]))
 
     jacobian = numericalGradient(objectiveFunction)
 
-    constraints = ({'type': 'ineq',
-                    'fun': lambda mult: mult},
-
-                    {'type': 'ineq',
-                    'fun': lambda mult: slackTightness - mult},
-
-                    {'type': 'eq',
-                    'fun': lambda mult: 
+    constraints = [{'type': 'ineq',
+                    'fun': lambda mult: mult[i]} for i in range(len(x))] + \
+                  [{'type': 'ineq',
+                    'fun': lambda mult: slackTightness - mult[i]} for i in range(len(x))] + \
+                  [{'type': 'eq',
+                    'fun': lambda mult:
                         sum([mult[i] * y[i]
-                            for i in range(len(mult))])})
+                            for i in range(len(mult))])}]
 
     x0 = np.random.randn(len(x))
     res_cons = optimize.minimize(objectiveFunction,x0,jac=jacobian,constraints=constraints,
@@ -98,18 +99,12 @@ def testOptimize():
 
     jacobian = numericalGradient(objectiveFunction)
 
-    constraints = ({'type': 'ineq',
-                    'fun': lambda mult: mult},
-
-                    {'type': 'ineq',
-                    'fun': lambda mult: slackTightness - mult},
-
+    constraints = ({'type': 'eq',
+                    'fun': lambda args: args[0] - 5},
                     {'type': 'eq',
-                    'fun': lambda mult: 
-                        sum([mult[i] * y[i]
-                            for i in range(len(mult))])})
+                    'fun': lambda args: args[1] - 5})
 
-    x0 = np.random.randn(len(x))
+    x0 = np.random.randn(2)
     res_cons = optimize.minimize(objectiveFunction,x0,jac=jacobian,constraints=constraints,
         method='SLSQP',options={'disp':False})
 
@@ -135,6 +130,6 @@ def main():
     print(classifier(np.array((-10, -10))))
 
 if __name__ == '__main__':
-    #testOptimize()
+    #print(testOptimize())
     main()
     #unittest.main()
