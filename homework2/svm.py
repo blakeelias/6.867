@@ -66,8 +66,6 @@ def numericalGradient(func, intervalWidth = 1e-3):
     return gradient
 
 def svmMultipliers(x, y, slackTightness):
-    print('x', x)
-    print('len(x)', len(x))
     def objectiveFunction(multipliers):
         return -1*(sum(multipliers) - 0.5 * sum([
             sum([
@@ -75,8 +73,14 @@ def svmMultipliers(x, y, slackTightness):
                 for j in range(len(x))])
             for i in range(len(x))]))
 
-    jacobian = numericalGradient(objectiveFunction)
+    print('objectiveFunction: ')
+    print('\sum_{i=1}^n \\alpha_i')
+    for i in range(len(x)):
+        for j in range(len(x)):
+            print( ' + %s \\alpha_%s\\alpha_%s' %
+                (y[i]*y[j]*(x[i].dot(x[j])), i, j))
 
+    jacobian = numericalGradient(objectiveFunction)
  
     constraints = [{'type': 'eq',
                     'fun': lambda mult:
@@ -85,6 +89,14 @@ def svmMultipliers(x, y, slackTightness):
                     'jac': numericalGradient(lambda mult:
                         sum([mult[i] * y[i]
                             for i in range(len(mult))]))}]
+
+    print('constraints: ')
+    for i in range(len(x)):
+        print('(%s)\\alpha_%s + ' % (y[i], i))
+    print(' = 0')
+
+    print('0 \\le \\alpha_i \\le %s' % slackTightness)
+
     bounds = ((0, slackTightness),) * len(x)
 
     constraints = tuple(constraints)
