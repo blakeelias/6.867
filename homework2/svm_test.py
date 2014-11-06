@@ -1,6 +1,6 @@
 from numpy import *
 from plotBoundary import *
-# import your SVM training code
+import svm
 
 # parameters
 name = 'ls'
@@ -13,6 +13,7 @@ Y = train[:, 2:3].copy()
 
 # Carry out training, primal and/or dual
 ### TODO ###
+predictSVM = svm.svm(X, Y, 1)
 # Define the predictSVM(x) function, which uses trained parameters
 ### TODO ###
 

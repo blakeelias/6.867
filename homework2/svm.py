@@ -5,7 +5,7 @@ import pylab as pl
 
 import unittest
 
-def svm(x, y, slackTightness):
+def svm(x, y, slackTightness, verbose=False):
     '''Computes a support vector machine from training data 'data' (which is in the form:
     data = [(x, classification), ...]
         x = (x0, x1, ...)
@@ -13,14 +13,18 @@ def svm(x, y, slackTightness):
     and slackTightness, a positive real number indicating how hard we should try to
     keep all of the points on the appropriate side of the margin.'''
 
-    multipliers = svmMultipliers(x, y, slackTightness)
-    print('slackTightness', slackTightness)
-    print('multipliers', multipliers)
+    multipliers = svmMultipliers(x, y, slackTightness, verbose)
+    if verbose:
+        print('slackTightness', slackTightness)
+        print('multipliers', multipliers)
+
     w = svmWeights(x, y, multipliers)
     M = [i
         for i in range(len(multipliers))
         if 0 < multipliers[i] < slackTightness]
-    print('M', M)
+    
+    if verbose:
+        print('M', M)
 
     S = [i
         for i in range(len(multipliers))
@@ -35,7 +39,8 @@ def svm(x, y, slackTightness):
     def classify(example):
         return w.T.dot(example) + w_0 > 0
 
-    print(w, w_0)
+    if verbose:
+        print(w, w_0)
 
     return classify
 
@@ -65,7 +70,7 @@ def numericalGradient(func, intervalWidth = 1e-3):
         return answer
     return gradient
 
-def svmMultipliers(x, y, slackTightness):
+def svmMultipliers(x, y, slackTightness, verbose=False):
     def objectiveFunction(multipliers):
         return -1*(sum(multipliers) - 0.5 * sum([
             sum([
@@ -73,12 +78,13 @@ def svmMultipliers(x, y, slackTightness):
                 for j in range(len(x))])
             for i in range(len(x))]))
 
-    print('objectiveFunction: ')
-    print('\sum_{i=1}^n \\alpha_i')
-    for i in range(len(x)):
-        for j in range(len(x)):
-            print( ' + %s \\alpha_%s\\alpha_%s' %
-                (y[i]*y[j]*(x[i].dot(x[j])), i, j))
+    if verbose:
+        print('objectiveFunction: ')
+        print('\sum_{i=1}^n \\alpha_i')
+        for i in range(len(x)):
+            for j in range(len(x)):
+                print( ' + %s \\alpha_%s\\alpha_%s' %
+                    (y[i]*y[j]*(x[i].dot(x[j])), i, j))
 
     jacobian = numericalGradient(objectiveFunction)
  
@@ -90,12 +96,13 @@ def svmMultipliers(x, y, slackTightness):
                         sum([mult[i] * y[i]
                             for i in range(len(mult))]))}]
 
-    print('constraints: ')
-    for i in range(len(x)):
-        print('(%s)\\alpha_%s + ' % (y[i], i))
-    print(' = 0')
+    if verbose:
+        print('constraints: ')
+        for i in range(len(x)):
+            print('(%s)\\alpha_%s + ' % (y[i], i))
+        print(' = 0')
 
-    print('0 \\le \\alpha_i \\le %s' % slackTightness)
+        print('0 \\le \\alpha_i \\le %s' % slackTightness)
 
     bounds = ((0, slackTightness),) * len(x)
 
