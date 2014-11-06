@@ -76,6 +76,8 @@ def svmMultipliers(x, y, slackTightness, verbose=False):
         [float(y[i]*y[j]*x[i].dot(x[j]))
             for j in range(len(x))]
         for i in range(len(x))])
+    print('Q')
+    print(Q)
 
     p = matrix([1.0 for i in range(len(x))])
     
