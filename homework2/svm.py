@@ -2,6 +2,7 @@ import numpy as np
 from scipy import optimize
 import pylab as pl
 #from mpl_toolkits.mplot3d.axes3d import Axes3D
+from cvxopt import matrix, solvers
 
 import unittest
 
@@ -71,48 +72,26 @@ def numericalGradient(func, intervalWidth = 1e-3):
     return gradient
 
 def svmMultipliers(x, y, slackTightness, verbose=False):
-    def objectiveFunction(multipliers):
-        return -1*(sum(multipliers) - 0.5 * sum([
-            sum([
-                multipliers[i]*multipliers[j]*y[i]*y[j]*(x[i].dot(x[j]))
-                for j in range(len(x))])
-            for i in range(len(x))]))
+    Q = matrix([
+        [float(y[i]*y[j]*x[i].dot(x[j]))
+            for j in range(len(x))]
+        for i in range(len(x))])
 
-    if verbose:
-        print('objectiveFunction: ')
-        print('\sum_{i=1}^n \\alpha_i')
-        for i in range(len(x)):
-            for j in range(len(x)):
-                print( ' + %s \\alpha_%s\\alpha_%s' %
-                    (y[i]*y[j]*(x[i].dot(x[j])), i, j))
+    p = matrix([1.0 for i in range(len(x))])
+    
+    I = np.identity(len(x))
+    G = matrix(np.vstack((I, -I)))
 
-    jacobian = numericalGradient(objectiveFunction)
- 
-    constraints = [{'type': 'eq',
-                    'fun': lambda mult:
-                        sum([mult[i] * y[i]
-                            for i in range(len(mult))]),
-                    'jac': numericalGradient(lambda mult:
-                        sum([mult[i] * y[i]
-                            for i in range(len(mult))]))}]
+    h = matrix([0.0] * len(x)
+        + [slackTightness] * len(x))
 
-    if verbose:
-        print('constraints: ')
-        for i in range(len(x)):
-            print('(%s)\\alpha_%s + ' % (y[i], i))
-        print(' = 0')
+    A = matrix([1.0] * len(x), (1, len(x)))
 
-        print('0 \\le \\alpha_i \\le %s' % slackTightness)
+    b = matrix(0.0)
 
-    bounds = ((0, slackTightness),) * len(x)
+    sol=solvers.qp(Q, p, G, h, A, b)
 
-    constraints = tuple(constraints)
-
-    x0 = np.random.randn(len(x))
-    res_cons = optimize.minimize(objectiveFunction,x0,jac=jacobian,constraints=constraints,bounds=bounds,
-        method='SLSQP',options={'disp':False})
-
-    return res_cons['x']
+    return sol['x']
 
 def testOptimize():
     def objectiveFunction(args):
