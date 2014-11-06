@@ -77,17 +77,20 @@ def svmMultipliers(x, y, slackTightness):
 
     jacobian = numericalGradient(objectiveFunction)
 
-    constraints = [{'type': 'ineq',
-                    'fun': lambda mult: mult[i]} for i in range(len(x))] + \
-                  [{'type': 'ineq',
-                    'fun': lambda mult: slackTightness - mult[i]} for i in range(len(x))] + \
-                  [{'type': 'eq',
+ 
+    constraints = [{'type': 'eq',
                     'fun': lambda mult:
                         sum([mult[i] * y[i]
-                            for i in range(len(mult))])}]
+                            for i in range(len(mult))]),
+                    'jac': numericalGradient(lambda mult:
+                        sum([mult[i] * y[i]
+                            for i in range(len(mult))]))}]
+    bounds = ((0, slackTightness),) * len(x)
+
+    constraints = tuple(constraints)
 
     x0 = np.random.randn(len(x))
-    res_cons = optimize.minimize(objectiveFunction,x0,jac=jacobian,constraints=constraints,
+    res_cons = optimize.minimize(objectiveFunction,x0,jac=jacobian,constraints=constraints,bounds=bounds,
         method='SLSQP',options={'disp':False})
 
     return res_cons['x']
@@ -125,7 +128,13 @@ class TestSVM(unittest.TestCase):
 def main():
     x = [(1, 2), (2, 2), (0, 0), (-2, 3)]
     y = [1, 1, -1, -1]
-    classifier = svm(map(lambda xx: np.array(xx), x), y, 1000)
+    classifier = svm(map(lambda xx: np.array(xx), x), y, 100)
+
+    print(classifier(np.array((1, 2))))
+    print(classifier(np.array((2, 2))))
+    print(classifier(np.array((0, 0))))
+    print(classifier(np.array((-2, 3))))
+
     print(classifier(np.array((10, 10))))
     print(classifier(np.array((-10, -10))))
 
