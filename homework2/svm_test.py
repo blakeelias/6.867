@@ -8,61 +8,68 @@ from svm import svmWeights
 
 # parameters
 #name = 'ls'
-name = 'smallOverlap'
-#print '======Training======'
-# load data from csv files
-train = loadtxt('data/data_'+name+'_train.csv')
-# use deep copy here to make cvxopt happy
-X = train[:, 0:2].copy()
-#X = [hstack((x, array(1,))) for x in X]
-Y = train[:, 2:3].copy()
+print('name', 'error on training set', 'error on validation set')
+for name in ['smallOverlap', 'bigOverlap', 'ls', 'nonsep']:
 
-'''print('X')
-print(X)
-print('Y')
-print(Y)'''
-# Carry out training, primal and/or dual
-### TODO ###
-#predictSVM = svm.svm(X, Y, 1)
-# Define the predictSVM(x) function, which uses trained parameters
-### TODO ###
+    #print '======Training======'
+    # load data from csv files
+    train = loadtxt('data/data_'+name+'_train.csv')
+    # use deep copy here to make cvxopt happy
+    X = train[:, 0:2].copy()
+    #X = [hstack((x, array(1,))) for x in X]
+    Y = train[:, 2:3].copy()
 
-print('C', 'b', 'error rate')
-for C in [0.01, 0.1, 1, 10, 100]:
-    for b in np.arange(1, 10, 1):
-        # b = 1/(2*sigma)
-        # sigma = 1/(2*b)
+    '''print('X')
+    print(X)
+    print('Y')
+    print(Y)'''
+    # Carry out training, primal and/or dual
+    ### TODO ###
+    #predictSVM = svm.svm(X, Y, 1)
+    # Define the predictSVM(x) function, which uses trained parameters
+    ### TODO ###
 
-        sol = svmcmpl.softmargin(matrix(X), matrix(Y), C, kernel='rbf', sigma=1.0/(2*b))
-        predictSVM = sol['classifier']
+    #print('C', 'b', 'error rate')
+    #for C in [0.01, 0.1, 1, 10, 100]:
+    #    for b in np.arange(1, 10, 1):
+            # b = 1/(2*sigma)
+            # sigma = 1/(2*b)
 
-        # plot training results
-        #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Train')
-        #print(predictSVM(matrix(X)))
+    C = 1
+    sol = svmcmpl.softmargin(matrix(X), matrix(Y), C, kernel='linear') #kernel='rbf', sigma=1.0/(2*b))
+    predictSVM = sol['classifier']
+    errors = sol['misclassified']
+    totalError = len(errors[0] + errors[1])
+    trainingErrorRate = totalError*1.0/len(X)
 
-        #print '======Validation======'
-        # load data from csv files
-        #validate = loadtxt('data/data_'+name+'_validate.csv')
-        validate = loadtxt('data/data_'+name+'_test.csv')
-        X = validate[:, 0:2]
-        Y = validate[:, 2:3]
-        # plot validation results
-        #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Validate')
+    # plot training results
+    #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Train')
+    #print(predictSVM(matrix(X)))
 
-        yPredicted = predictSVM(matrix(X))
-        nError = 0
-        for i in range(len(yPredicted)):
-            if yPredicted[i] != Y[i]:
-                nError += 1
+    #print '======Validation======'
+    # load data from csv files
+    #validate = loadtxt('data/data_'+name+'_validate.csv')
+    validate = loadtxt('data/data_'+name+'_test.csv')
+    X = validate[:, 0:2]
+    Y = validate[:, 2:3]
+    # plot validation results
+    #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Validate')
 
-        #print('weights')
-        #print(weights)
-        #print('geometric margin 1/||w||')
+    yPredicted = predictSVM(matrix(X))
+    nError = 0
+    for i in range(len(yPredicted)):
+        if yPredicted[i] != Y[i]:
+            nError += 1
+    validationErrorRate = nError*1.0/len(yPredicted)
 
-        print(C, b, nError*1.0/len(yPredicted))
+    #print('weights')
+    #print(weights)
+    #print('geometric margin 1/||w||')
 
-        #print('nError', nError)
-        #print('nTotal', len(yPredicted))
+    print(name, trainingErrorRate, validationErrorRate)
+
+    #print('nError', nError)
+    #print('nTotal', len(yPredicted))
 
 
 
