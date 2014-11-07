@@ -420,7 +420,6 @@ def softmargin(X, d, gamma, kernel = 'linear', sigma = 1.0, degree = 1, theta = 
             'iterations':sol['iterations'],
             'z':zs,
             'misclassified':(err1,err2),
-            'weights':w,
             'supportVectors': N}
 
 def softmargin_completion(Q, d, gamma):

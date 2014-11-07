@@ -27,41 +27,42 @@ print(Y)'''
 # Define the predictSVM(x) function, which uses trained parameters
 ### TODO ###
 
-print('C', 'geometric margin 1/||w||', 'error rate', 'supportVectors')
+print('C', 'b', 'error rate')
 for C in [0.01, 0.1, 1, 10, 100]:
-    #sol = svmcmpl.softmargin(matrix(X), matrix(Y), C, kernel='rbf')
-    sol = svmcmpl.softmargin(matrix(X), matrix(Y), C, kernel='linear')
-    predictSVM = sol['classifier']
-    weights = sol['weights']
-    supportVectors = sol['supportVectors']
+    for b in np.arange(1, 10, 1):
+        # b = 1/(2*sigma)
+        # sigma = 1/(2*b)
 
-    # plot training results
-    #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Train')
-    #print(predictSVM(matrix(X)))
+        sol = svmcmpl.softmargin(matrix(X), matrix(Y), C, kernel='rbf', sigma=1.0/(2*b))
+        predictSVM = sol['classifier']
 
-    #print '======Validation======'
-    # load data from csv files
-    #validate = loadtxt('data/data_'+name+'_validate.csv')
-    validate = loadtxt('data/data_'+name+'_test.csv')
-    X = validate[:, 0:2]
-    Y = validate[:, 2:3]
-    # plot validation results
-    #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Validate')
+        # plot training results
+        #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Train')
+        #print(predictSVM(matrix(X)))
 
-    yPredicted = predictSVM(matrix(X))
-    nError = 0
-    for i in range(len(yPredicted)):
-        if yPredicted[i] != Y[i]:
-            nError += 1
+        #print '======Validation======'
+        # load data from csv files
+        #validate = loadtxt('data/data_'+name+'_validate.csv')
+        validate = loadtxt('data/data_'+name+'_test.csv')
+        X = validate[:, 0:2]
+        Y = validate[:, 2:3]
+        # plot validation results
+        #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Validate')
 
-    #print('weights')
-    #print(weights)
-    #print('geometric margin 1/||w||')
+        yPredicted = predictSVM(matrix(X))
+        nError = 0
+        for i in range(len(yPredicted)):
+            if yPredicted[i] != Y[i]:
+                nError += 1
 
-    print(C, 1.0/sum([x*x for x in weights]), nError*1.0/len(yPredicted), supportVectors)
+        #print('weights')
+        #print(weights)
+        #print('geometric margin 1/||w||')
 
-    #print('nError', nError)
-    #print('nTotal', len(yPredicted))
+        print(C, b, nError*1.0/len(yPredicted))
+
+        #print('nError', nError)
+        #print('nTotal', len(yPredicted))
 
 
 
