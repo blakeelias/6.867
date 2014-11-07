@@ -39,6 +39,64 @@ Constraints:
 (-1)\alpha_2 +
 (-1)\alpha_3 = 0 \]
 \[  0 \le \alpha_i \le 100 \]
+
+    \item 
+data\_bigOverlap:
+
+    classifier: $0.395 x_1 + 0.356 x_2 - 0.653 > 0$
+
+Error rate: 6.5\%
+
+
+
+data\_smallOverlap:
+
+classifier:  $1.21 x_1 + 1.20 x_2 - 2.256 > 0$
+
+Error rate: 8\%
+
+
+
+data\_ls:
+
+classifier: $-1.94 x_1 + 2.58 x_2 - 0.0322$
+
+Error rate: 0.375\%
+
+
+
+data\_nonsep:
+
+classifier: $-0.114 x_1 -0.511 x_2 + 0.487$
+
+Error rate: 48\%
+
+    \item
+    \begin{enumerate}
+
+        \item
+
+            Data from the smallOverlap dataset is shown below and referenced in answers to parts (a) and (b).
+
+            ($C$, geometric margin: $1/||w||$, error rate, number of support vectors)
+            
+            (0.01, 2.1818056369776855, 0.08, 114)
+            
+            (0.1, 0.63132037056137913, 0.085, 66)
+            
+            (1, 0.34291076910827101, 0.08, 50)
+            
+            (10, 0.31684915985167916, 0.08, 48)
+            
+            (100, 0.31066728459715598, 0.08, 48)
+
+            As $C$ increases, the geometric margin decreases. This will always happen as $C$ is increased, because lowering $C$ allows the SVM to misclassify some points, allowing the separator to be further from the points that it correctly classifies. 
+
+        \item
+
+            As $C$ increases, the number of support vectors decreases.
+    \end{enumerate}
+
 \end{enumerate}
 
 \end{document}

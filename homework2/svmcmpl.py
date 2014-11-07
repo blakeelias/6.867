@@ -32,7 +32,7 @@ def cputime(T0 = (0.0, 0.0)):
 Tsv = 1e-5  
 
 weights = 'equal' # 'equal' or 'proportional'
-verbose = True
+verbose = False
 
 def kernel_matrix(X, kernel, sigma = 1.0, theta = 1.0, degree = 1, V = None, width = None):
     """
@@ -318,6 +318,7 @@ def softmargin(X, d, gamma, kernel = 'linear', sigma = 1.0, degree = 1, theta = 
         raise ValueError, "invalid weight type"
     
     # solve qp
+    solvers.options['show_progress'] = False
     sol = solvers.qp(Q, q, G, h, matrix(1.0, (1,N)), matrix(0.0))
     Tqp = cputime(Tqp)
     if verbose: print "utime = %f, stime = %f." % Tqp
@@ -344,19 +345,21 @@ def softmargin(X, d, gamma, kernel = 'linear', sigma = 1.0, degree = 1, theta = 
 
     # create classifier function object
     if kernel == 'linear':
-        print('creating classifier with linear kernel')
+        if verbose:
+            print('creating classifier with linear kernel')
 
         # w = X'*z / sigma
         w = matrix(0.0, (n,1))
         blas.gemv(X, z, w, trans = 'T', alpha = 1.0/sigma)
-        print('weights:')
-        print(w)
+        #print('weights:')
+        #print(w)
 
         def classifier(Y, soft = False):
             M = Y.size[0]
             x = matrix(b, (M,1))
-            print('b ( = w_0)')
-            print(b)
+            #print('b ( = w_0)')
+            #print(b)
+            #print('about to print long vector?')
             blas.gemv(Y, w, x, beta = 1.0)
             if soft: return x
             else:    return matrix([ 2*(xk > 0.0) - 1 for xk in x ])
@@ -416,7 +419,9 @@ def softmargin(X, d, gamma, kernel = 'linear', sigma = 1.0, degree = 1, theta = 
             'cputime': (sum(Ttotal),sum(Tqp),sum(Tkernel)), 
             'iterations':sol['iterations'],
             'z':zs,
-            'misclassified':(err1,err2)}
+            'misclassified':(err1,err2),
+            'weights':w,
+            'supportVectors': N}
 
 def softmargin_completion(Q, d, gamma):
     """

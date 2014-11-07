@@ -17,7 +17,8 @@ def svm(x, y, slackTightness, verbose=False):
     multipliers = svmMultipliers(x, y, slackTightness, verbose)
     if verbose:
         print('slackTightness', slackTightness)
-        print('multipliers', multipliers)
+        print('multipliers')
+        print(multipliers)
 
     w = svmWeights(x, y, multipliers)
     M = [i
@@ -25,7 +26,8 @@ def svm(x, y, slackTightness, verbose=False):
         if 0 < multipliers[i] < slackTightness]
     
     if verbose:
-        print('M', M)
+        print('M')
+        print(M)
 
     S = [i
         for i in range(len(multipliers))
@@ -40,12 +42,18 @@ def svm(x, y, slackTightness, verbose=False):
     def classify(example):
         return w.T.dot(example) + w_0 > 0
 
-    if verbose:
-        print(w, w_0)
+    print('decision boundary:')
+    for i in range(len(w)):
+        print('%sx_%s+' % (w[i], i))
+    print(w_0)
 
     return classify
 
 def svmWeights(x, y, multipliers):
+    print('in svmWeights')
+    print(x)
+    print(y)
+    print(multipliers)
     return sum([
         multipliers[i] * x[i] * y[i]
         for i in range(len(multipliers))])
@@ -79,7 +87,7 @@ def svmMultipliers(x, y, slackTightness, verbose=False):
     print('Q')
     print(Q)
 
-    p = matrix([1.0 for i in range(len(x))])
+    p = -matrix([1.0 for i in range(len(x))])
     
     I = np.identity(len(x))
     G = matrix(np.vstack((I, -I)))
@@ -96,22 +104,14 @@ def svmMultipliers(x, y, slackTightness, verbose=False):
     return sol['x']
 
 def testOptimize():
-    def objectiveFunction(args):
-        x, y = args
-        return x*x + y*y
-
-    jacobian = numericalGradient(objectiveFunction)
-
-    constraints = ({'type': 'eq',
-                    'fun': lambda args: args[0] - 5},
-                    {'type': 'eq',
-                    'fun': lambda args: args[1] - 5})
-
-    x0 = np.random.randn(2)
-    res_cons = optimize.minimize(objectiveFunction,x0,jac=jacobian,constraints=constraints,
-        method='SLSQP',options={'disp':False})
-
-    return res_cons['x']
+    Q = 2*matrix([ [2, .5], [.5, 1] ])
+    p = matrix([1.0, 1.0])
+    G = matrix([[-1.0,0.0],[0.0,-1.0]])
+    h = matrix([0.0,0.0])
+    A = matrix([1.0, 1.0], (1,2))
+    b = matrix(1.0)
+    sol=solvers.qp(Q, p, G, h, A, b)
+    return sol['x']
 
 class TestSVM(unittest.TestCase):
 
@@ -128,7 +128,7 @@ class TestSVM(unittest.TestCase):
 def main():
     x = [(1, 2), (2, 2), (0, 0), (-2, 3)]
     y = [1, 1, -1, -1]
-    classifier = svm(map(lambda xx: np.array(xx), x), y, 100)
+    classifier = svm(map(lambda xx: np.array(xx), x), y, 1, verbose=True)
 
     print(classifier(np.array((1, 2))))
     print(classifier(np.array((2, 2))))
@@ -139,6 +139,6 @@ def main():
     print(classifier(np.array((-10, -10))))
 
 if __name__ == '__main__':
-    #print(testOptimize())
-    main()
+    print(testOptimize())
+    #main()
     #unittest.main()
