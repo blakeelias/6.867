@@ -46,7 +46,7 @@ Constraints:
 ('bigOverlap', 0.28, 0.065)
 ('ls', 0.0, 0.00375)
 ('nonsep', 0.48, 0.48)
-    
+
 data\_bigOverlap:
 
     classifier: $0.395 x_1 + 0.356 x_2 - 0.653 > 0$
@@ -79,101 +79,372 @@ Error rate: 48\%
 
     \item
 
-    Results are shown below from a test on the `smallOverlap' dataset using an SVM radial basis kernel function.
+    Results are shown below from testing an SVM with radial basis kernel function on all the datasets given using various values of $b$ (radial basis kernel bandwidth) and $C$.
 
-    ($C$, $b$ (bandwidth for radial basis kernel), error rate on validation set)
-    
-    (0.01, 1, 0.115)
-    
-    (0.01, 2, 0.105)
-    
-    (0.01, 3, 0.1)
-    
-    (0.01, 4, 0.075)
-    
-    (0.01, 5, 0.07)
-    
-    (0.01, 6, 0.06)
-    
-    (0.01, 7, 0.055)
-    
-    (0.01, 8, 0.055)
-    
-    (0.01, 9, 0.055)
-    
-    (0.1, 1, 0.08)
-    
-    (0.1, 2, 0.075)
-    
-    (0.1, 3, 0.075)
-    
-    (0.1, 4, 0.075)
-    
-    (0.1, 5, 0.07)
-    
-    (0.1, 6, 0.065)
-    
-    (0.1, 7, 0.055)
-    
-    (0.1, 8, 0.055)
-    
-    (0.1, 9, 0.055)
-    
-    (1, 1, 0.07)
-    
-    (1, 2, 0.065)
-    
-    (1, 3, 0.065)
-    
-    (1, 4, 0.065)
-    
-    (1, 5, 0.055)
-    
-    (1, 6, 0.055)
-    
-    (1, 7, 0.055)
-    
-    (1, 8, 0.055)
-    
-    (1, 9, 0.055)
-    
-    (10, 1, 0.07)
-    
-    (10, 2, 0.055)
-    
-    (10, 3, 0.055)
-    
-    (10, 4, 0.055)
-    
-    (10, 5, 0.05)
-    
-    (10, 6, 0.045)
-    
-    (10, 7, 0.04)
-    
-    (10, 8, 0.02)
-    
-    (10, 9, 0.015)
-    
-    (100, 1, 0.055)
-    
-    (100, 2, 0.05)
-    
-    (100, 3, 0.03)
-    
-    (100, 4, 0.01)
-    
-    (100, 5, 0.01)
-    
-    (100, 6, 0.005)
-    
-    (100, 7, 0.0)
-    
-    (100, 8, 0.0)
-    
-    (100, 9, 0.0)
+('name', 'C', 'b', 'error on validation set')
+('smallOverlap', 0.01, 1, 0.115)
 
-    Increasing both $C$ and $b$ (the bandwidth) decreases error rate on the validation set, with the optimal performance being $C=100$ and $b=7$, $8$ or $9$.
+('smallOverlap', 0.01, 2, 0.105)
+
+('smallOverlap', 0.01, 3, 0.1)
+
+('smallOverlap', 0.01, 4, 0.075)
+
+('smallOverlap', 0.01, 5, 0.07)
+
+('smallOverlap', 0.01, 6, 0.06)
+
+('smallOverlap', 0.01, 7, 0.055)
+
+('smallOverlap', 0.01, 8, 0.055)
+
+('smallOverlap', 0.01, 9, 0.055)
+
+('smallOverlap', 0.1, 1, 0.08)
+
+('smallOverlap', 0.1, 2, 0.075)
+
+('smallOverlap', 0.1, 3, 0.075)
+
+('smallOverlap', 0.1, 4, 0.075)
+
+('smallOverlap', 0.1, 5, 0.07)
+
+('smallOverlap', 0.1, 6, 0.065)
+
+('smallOverlap', 0.1, 7, 0.055)
+
+('smallOverlap', 0.1, 8, 0.055)
+
+('smallOverlap', 0.1, 9, 0.055)
+
+('smallOverlap', 1, 1, 0.07)
+
+('smallOverlap', 1, 2, 0.065)
+
+('smallOverlap', 1, 3, 0.065)
+
+('smallOverlap', 1, 4, 0.065)
+
+('smallOverlap', 1, 5, 0.055)
+
+('smallOverlap', 1, 6, 0.055)
+
+('smallOverlap', 1, 7, 0.055)
+
+('smallOverlap', 1, 8, 0.055)
+
+('smallOverlap', 1, 9, 0.055)
+
+('smallOverlap', 10, 1, 0.07)
+
+('smallOverlap', 10, 2, 0.055)
+
+('smallOverlap', 10, 3, 0.055)
+
+('smallOverlap', 10, 4, 0.055)
+
+('smallOverlap', 10, 5, 0.05)
+
+('smallOverlap', 10, 6, 0.045)
+
+('smallOverlap', 10, 7, 0.04)
+
+('smallOverlap', 10, 8, 0.02)
+
+('smallOverlap', 10, 9, 0.015)
+
+('smallOverlap', 100, 1, 0.055)
+
+('smallOverlap', 100, 2, 0.05)
+
+('smallOverlap', 100, 3, 0.03)
+
+('smallOverlap', 100, 4, 0.01)
+
+('smallOverlap', 100, 5, 0.01)
+
+('smallOverlap', 100, 6, 0.005)
+
+('smallOverlap', 100, 7, 0.0)
+
+('smallOverlap', 100, 8, 0.0)
+
+('smallOverlap', 100, 9, 0.0)
+
+('bigOverlap', 0.01, 1, 0.105)
+
+('bigOverlap', 0.01, 2, 0.105)
+
+('bigOverlap', 0.01, 3, 0.1)
+
+('bigOverlap', 0.01, 4, 0.075)
+
+('bigOverlap', 0.01, 5, 0.07)
+
+('bigOverlap', 0.01, 6, 0.06)
+
+('bigOverlap', 0.01, 7, 0.055)
+
+('bigOverlap', 0.01, 8, 0.055)
+
+('bigOverlap', 0.01, 9, 0.055)
+
+('bigOverlap', 0.1, 1, 0.08)
+
+('bigOverlap', 0.1, 2, 0.075)
+
+('bigOverlap', 0.1, 3, 0.075)
+
+('bigOverlap', 0.1, 4, 0.075)
+
+('bigOverlap', 0.1, 5, 0.07)
+
+('bigOverlap', 0.1, 6, 0.065)
+
+('bigOverlap', 0.1, 7, 0.055)
+
+('bigOverlap', 0.1, 8, 0.055)
+
+('bigOverlap', 0.1, 9, 0.055)
+
+('bigOverlap', 1, 1, 0.07)
+
+('bigOverlap', 1, 2, 0.065)
+
+('bigOverlap', 1, 3, 0.065)
+
+('bigOverlap', 1, 4, 0.065)
+
+('bigOverlap', 1, 5, 0.055)
+
+('bigOverlap', 1, 6, 0.055)
+
+('bigOverlap', 1, 7, 0.055)
+
+('bigOverlap', 1, 8, 0.055)
+
+('bigOverlap', 1, 9, 0.055)
+
+('bigOverlap', 10, 1, 0.07)
+
+('bigOverlap', 10, 2, 0.055)
+
+('bigOverlap', 10, 3, 0.055)
+
+('bigOverlap', 10, 4, 0.055)
+
+('bigOverlap', 10, 5, 0.05)
+
+('bigOverlap', 10, 6, 0.045)
+
+('bigOverlap', 10, 7, 0.04)
+
+('bigOverlap', 10, 8, 0.02)
+
+('bigOverlap', 10, 9, 0.015)
+
+('bigOverlap', 100, 1, 0.055)
+
+('bigOverlap', 100, 2, 0.05)
+
+('bigOverlap', 100, 3, 0.03)
+
+('bigOverlap', 100, 4, 0.01)
+
+('bigOverlap', 100, 5, 0.01)
+
+('bigOverlap', 100, 6, 0.005)
+
+('bigOverlap', 100, 7, 0.0)
+
+('bigOverlap', 100, 8, 0.0)
+
+('bigOverlap', 100, 9, 0.0)
+
+('ls', 0.01, 1, 0.0225)
+
+('ls', 0.01, 2, 0.00875)
+
+('ls', 0.01, 3, 0.00875)
+
+('ls', 0.01, 4, 0.00875)
+
+('ls', 0.01, 5, 0.00875)
+
+('ls', 0.01, 6, 0.00875)
+
+('ls', 0.01, 7, 0.00875)
+
+('ls', 0.01, 8, 0.00875)
+
+('ls', 0.01, 9, 0.00875)
+
+('ls', 0.1, 1, 0.00625)
+
+('ls', 0.1, 2, 0.005)
+
+('ls', 0.1, 3, 0.005)
+
+('ls', 0.1, 4, 0.005)
+
+('ls', 0.1, 5, 0.005)
+
+('ls', 0.1, 6, 0.00375)
+
+('ls', 0.1, 7, 0.00375)
+
+('ls', 0.1, 8, 0.00375)
+
+('ls', 0.1, 9, 0.00375)
+
+('ls', 1, 1, 0.00375)
+
+('ls', 1, 2, 0.00375)
+
+('ls', 1, 3, 0.00375)
+
+('ls', 1, 4, 0.00375)
+
+('ls', 1, 5, 0.00375)
+
+('ls', 1, 6, 0.00375)
+
+('ls', 1, 7, 0.0025)
+
+('ls', 1, 8, 0.0025)
+
+('ls', 1, 9, 0.00125)
+
+('ls', 10, 1, 0.00375)
+
+('ls', 10, 2, 0.00125)
+
+('ls', 10, 3, 0.00125)
+
+('ls', 10, 4, 0.00125)
+
+('ls', 10, 5, 0.00125)
+
+('ls', 10, 6, 0.0)
+
+('ls', 10, 7, 0.0)
+
+('ls', 10, 8, 0.0)
+
+('ls', 10, 9, 0.0)
+
+('ls', 100, 1, 0.00125)
+
+('ls', 100, 2, 0.0)
+
+('ls', 100, 3, 0.0)
+
+('ls', 100, 4, 0.0)
+
+('ls', 100, 5, 0.0)
+
+('ls', 100, 6, 0.0)
+
+('ls', 100, 7, 0.0)
+
+('ls', 100, 8, 0.0)
+
+('ls', 100, 9, 0.0)
+
+('nonsep', 0.01, 1, 0.06)
+
+('nonsep', 0.01, 2, 0.0575)
+
+('nonsep', 0.01, 3, 0.0525)
+
+('nonsep', 0.01, 4, 0.05)
+
+('nonsep', 0.01, 5, 0.0475)
+
+('nonsep', 0.01, 6, 0.0425)
+
+('nonsep', 0.01, 7, 0.04)
+
+('nonsep', 0.01, 8, 0.04)
+
+('nonsep', 0.01, 9, 0.0375)
+
+('nonsep', 0.1, 1, 0.055)
+
+('nonsep', 0.1, 2, 0.05)
+
+('nonsep', 0.1, 3, 0.05)
+
+('nonsep', 0.1, 4, 0.05)
+
+('nonsep', 0.1, 5, 0.05)
+
+('nonsep', 0.1, 6, 0.0475)
+
+('nonsep', 0.1, 7, 0.0425)
+
+('nonsep', 0.1, 8, 0.04)
+
+('nonsep', 0.1, 9, 0.04)
+
+('nonsep', 1, 1, 0.045)
+
+('nonsep', 1, 2, 0.045)
+
+('nonsep', 1, 3, 0.04)
+
+('nonsep', 1, 4, 0.035)
+
+('nonsep', 1, 5, 0.035)
+
+('nonsep', 1, 6, 0.035)
+
+('nonsep', 1, 7, 0.025)
+
+('nonsep', 1, 8, 0.025)
+
+('nonsep', 1, 9, 0.025)
+
+('nonsep', 10, 1, 0.04)
+
+('nonsep', 10, 2, 0.03)
+
+('nonsep', 10, 3, 0.025)
+
+('nonsep', 10, 4, 0.0225)
+
+('nonsep', 10, 5, 0.02)
+
+('nonsep', 10, 6, 0.0175)
+
+('nonsep', 10, 7, 0.0175)
+
+('nonsep', 10, 8, 0.01)
+
+('nonsep', 10, 9, 0.01)
+
+('nonsep', 100, 1, 0.0325)
+
+('nonsep', 100, 2, 0.0175)
+
+('nonsep', 100, 3, 0.015)
+
+('nonsep', 100, 4, 0.0075)
+
+('nonsep', 100, 5, 0.0025)
+
+('nonsep', 100, 6, 0.0025)
+
+('nonsep', 100, 7, 0.0025)
+
+('nonsep', 100, 8, 0.0025)
+
+('nonsep', 100, 9, 0.0025)
+
+
+
+    Increasing both $C$ and $b$ (the bandwidth) decreases error rate on the validation set, with the optimal performance being $C=100$ and $b=7$, $8$ or $9$. Using the maximum values of $C$ and $b$ minimized the validation error for all datasets.
 
     Data from the smallOverlap dataset is shown below and referenced in answers to parts (a) and (b).
 
