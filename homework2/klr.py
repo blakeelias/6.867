@@ -27,6 +27,8 @@ def numericalGradient(func, intervalWidth = 1e-3):
         return np.array(answer)
     return gradient
 
+currentAlphas = []
+onePreviousAlphas = []
 
 def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='rbf'):
     X = np.array(X)
@@ -35,6 +37,16 @@ def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='rbf'
     memo = {}
 
     def objective(alpha):
+        global currentAlphas
+        global onePreviousAlphas
+        global i
+
+        onePreviousAlphas = currentAlphas
+        currentAlphas = alpha
+
+        #if random.random() < 0.01:
+        #    raise Exception('failing on purpose for test')
+        #print(currentAlphas)
         # \sum_i \log(1 + \exp(-y^{(i)} (f(x^{(i)}) + w_0)  )
         # \sum_j K(x, x^{(j)}) \alpha_j
         w_0 = alpha[0]
@@ -62,11 +74,17 @@ def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='rbf'
         print(ans)
         return ans
 
-    alpha = optimize.minimize(objective,
-        np.array([random.random() for i in range(len(X) + 1)]),
-        jac = numericalGradient(objective)
-        )['x']
+    try:
+        alpha = optimize.minimize(objective,
+            np.array([random.random() for i in range(len(X) + 1)]),
+            jac = numericalGradient(objective),
+            )['x']
+    except Exception as e:
+        print(e)
+        alpha = onePreviousAlphas
 
+    print('retrieving from alpha')
+    print(alpha)
     w_0 = alpha[0]
     alpha = alpha[1:]
     W = X.T.dot(alpha)
