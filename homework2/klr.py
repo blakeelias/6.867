@@ -28,9 +28,11 @@ def numericalGradient(func, intervalWidth = 1e-3):
     return gradient
 
 
-def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0):
+def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='rbf'):
     X = np.array(X)
     Y = np.array(Y)
+
+    memo = {}
 
     def objective(alpha):
         # \sum_i \log(1 + \exp(-y^{(i)} (f(x^{(i)}) + w_0)  )
@@ -40,8 +42,25 @@ def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0):
         def dot(x, X, alpha):
             return x.dot(X.T).dot(alpha)
 
-        return sum([log(1 + exp(-Y[i]*(dot(X[i], X, alpha) + w_0))) for i in range(len(X))]) + \
-            regularizeLambda * sqrt(alpha.dot(alpha) + epsilon)
+        if kernel == 'linear':
+            ans = sum([log(1 + exp(-Y[i]*(dot(X[i], X, alpha) + w_0))) for i in range(len(X))]) + \
+                regularizeLambda * sqrt(alpha.dot(alpha) + epsilon)
+
+        if kernel == 'rbf':
+            def kernelFunc(x1, x2):
+                return exp(-np.linalg.norm(x1 - x2)**2 / (2*1))
+            
+            def kernelVec(i, X):
+                if i in memo:
+                    return memo[i]
+                memo[i] = [kernelFunc(X[i], x) for x in X]
+                return memo[i]
+
+            ans = sum([log(1 + exp(-Y[i]*(np.dot(kernelVec(i, X), alpha) + w_0))) for i in range(len(X))]) + \
+                regularizeLambda * sqrt(alpha.dot(alpha) + epsilon)
+
+        print(ans)
+        return ans
 
     alpha = optimize.minimize(objective,
         np.array([random.random() for i in range(len(X) + 1)]),
