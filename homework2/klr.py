@@ -28,9 +28,8 @@ def numericalGradient(func, intervalWidth = 1e-3):
     return gradient
 
 currentAlphas = []
-onePreviousAlphas = []
 
-def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='rbf'):
+def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='linear'):
     X = np.array(X)
     Y = np.array(Y)
 
@@ -38,11 +37,6 @@ def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='rbf'
 
     def objective(alpha):
         global currentAlphas
-        global onePreviousAlphas
-        global i
-
-        onePreviousAlphas = currentAlphas
-        currentAlphas = alpha
 
         #if random.random() < 0.01:
         #    raise Exception('failing on purpose for test')
@@ -71,7 +65,10 @@ def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='rbf'
             ans = sum([log(1 + exp(-Y[i]*(np.dot(kernelVec(i, X), alpha) + w_0))) for i in range(len(X))]) + \
                 regularizeLambda * sqrt(alpha.dot(alpha) + epsilon)
 
-        print(ans)
+        currentAlphas.append([ans, np.hstack((np.array(w_0), alpha))])
+        currentAlphas = currentAlphas[-10:]
+        #print(ans)
+        #print(currentAlphas)
         return ans
 
     try:
@@ -81,7 +78,7 @@ def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='rbf'
             )['x']
     except Exception as e:
         print(e)
-        alpha = onePreviousAlphas
+        alpha = min(currentAlphas)[1]
 
     print('retrieving from alpha')
     print(alpha)
@@ -96,3 +93,4 @@ def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='rbf'
         return 1 if logit(x.dot(W) + w_0) > 0.5 else -1
 
     return classify
+

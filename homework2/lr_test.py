@@ -3,7 +3,7 @@ from plotBoundary import *
 import klr
 
 # parameters
-name = 'ls'
+name = 'stdev2'
 print '======Training======'
 # load data from csv files
 train = loadtxt('data/data_'+name+'_train.csv')
