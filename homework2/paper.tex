@@ -473,5 +473,18 @@ Error rate: 48\%
 
 \end{enumerate}
 
+\section{Logistic Regression (LR)}
+
+\begin{enumerate}
+    \item
+    \[ NLL(w) = \sum_i \log(1 + \exp(-y^{(i)} (x^{(i)} w + w_0)  ) \]
+    \[ NLL(w) = \sum_i \log(1 + \exp(-y^{(i)} (x^{(i)} X^T \alpha + w_0)  ) \]
+    \[ NLL(w) = \sum_i \log(1 + \exp(-y^{(i)} (f(x^{(i)}) + w_0)  ) \], where:
+    \[ f(x) = x X^T \alpha \]
+    \[ f(x) = \sum_j K(x, x^{(j)}) \alpha_j \]
+    Here, $K$ is a kernel function which gives the dot product of two vectors $x_a$ and $x_b$, possibly in a transformed space, i.e. $\phi(x_a)*\phi(x_b)$.
+
+\end{enumerate}
+
 \end{document}
 
