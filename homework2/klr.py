@@ -28,15 +28,21 @@ def numericalGradient(func, intervalWidth = 1e-3):
     return gradient
 
 currentAlphas = []
+j = 0
 
-def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='linear'):
+def lr(X, Y, verbose=False, epsilon=0.0000001, regularizeLambda = 1e1, kernel='linear'):
     X = np.array(X)
     Y = np.array(Y)
 
     memo = {}
+    
 
     def objective(alpha):
         global currentAlphas
+        global j
+
+        j += 1
+        numIters = 100
 
         #if random.random() < 0.01:
         #    raise Exception('failing on purpose for test')
@@ -49,8 +55,22 @@ def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='line
             return x.dot(X.T).dot(alpha)
 
         if kernel == 'linear':
-            ans = sum([log(1 + exp(-Y[i]*(dot(X[i], X, alpha) + w_0))) for i in range(len(X))]) + \
-                regularizeLambda * sqrt(alpha.dot(alpha) + epsilon)
+            if j % numIters == 0:
+                print('alpha magnitude: ', np.linalg.norm(alpha))
+            ans = regularizeLambda * sqrt(sum(abs(alpha))**2 + epsilon)
+            for i in range(len(X)):
+                exponent = -Y[i]*(dot(X[i], X, alpha) + w_0)
+                #print('exponent', exponent)
+                try:
+                    ans += log(1 + exp(exponent))
+                except:
+                    print('exception')
+                    if j % numIters == 0:
+                        print('objective: ', ans)
+                    return ans
+                    #return float('inf')
+            if j % numIters == 0:
+                print('objective: ', ans)
 
         if kernel == 'rbf':
             def kernelFunc(x1, x2):
@@ -63,22 +83,20 @@ def lr(X, Y, verbose=False, epsilon=0.0001, regularizeLambda = 1.0, kernel='line
                 return memo[i]
 
             ans = sum([log(1 + exp(-Y[i]*(np.dot(kernelVec(i, X), alpha) + w_0))) for i in range(len(X))]) + \
-                regularizeLambda * sqrt(alpha.dot(alpha) + epsilon)
+                regularizeLambda * sqrt(sum(abs(alpha))**2 + epsilon)
 
         currentAlphas.append([ans, np.hstack((np.array(w_0), alpha))])
         currentAlphas = currentAlphas[-10:]
-        #print(ans)
-        #print(currentAlphas)
+        
         return ans
 
-    try:
-        alpha = optimize.minimize(objective,
-            np.array([random.random() for i in range(len(X) + 1)]),
-            jac = numericalGradient(objective),
-            )['x']
-    except Exception as e:
-        print(e)
-        alpha = min(currentAlphas)[1]
+    result = optimize.fmin_cg(objective,
+        np.array([1e-3 for i in range(len(X) + 1)]),
+        gtol = 3*regularizeLambda
+        #jac = numericalGradient(objective),
+        )
+    print('result', result)
+    alpha = result
 
     print('retrieving from alpha')
     print(alpha)
