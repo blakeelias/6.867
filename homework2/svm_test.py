@@ -9,15 +9,17 @@ from svm import svmWeights
 # parameters
 #name = 'ls'
 print('name', 'C', 'b', 'error on validation set') # 'error on training set',
-for name in ['smallOverlap', 'bigOverlap', 'ls', 'nonsep']:
-
+#for name in ['smallOverlap', 'bigOverlap', 'ls', 'nonsep']:
+for name in ['kaggle_train']:
     #print '======Training======'
     # load data from csv files
-    train = loadtxt('data/data_'+name+'_train.csv')
+    #train = loadtxt('data/data_'+name+'_train.csv')
+    train = loadtxt('data/'+name+'.csv', delimiter = ',')
+
     # use deep copy here to make cvxopt happy
-    X = train[:, 0:2].copy()
+    X = train[:, 1:55].copy()
     #X = [hstack((x, array(1,))) for x in X]
-    Y = train[:, 2:3].copy()
+    Y = train[:, 55:56].copy()
 
     '''print('X')
     print(X)
@@ -60,7 +62,7 @@ for name in ['smallOverlap', 'bigOverlap', 'ls', 'nonsep']:
                 # plot validation results
                 #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Validate')
 
-                probK[k] = predictSVM(matrix(X))
+                probK[k] = predictSVM(matrix(X), soft = True)
 
             yPredicted = [np.argmax(np.array([probK[k][i] for k in probK])) for i in range(len(X))]
 
