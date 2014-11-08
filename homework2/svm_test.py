@@ -35,27 +35,35 @@ for name in ['smallOverlap', 'bigOverlap', 'ls', 'nonsep']:
             # b = 1/(2*sigma)
             # sigma = 1/(2*b)
 
+            probK = {}
+
             #C = 1
-            sol = svmcmpl.softmargin(matrix(X), matrix(Y), C, kernel='rbf', sigma=1.0/(2*b))
-            predictSVM = sol['classifier']
-            errors = sol['misclassified']
-            totalError = len(errors[0] + errors[1])
-            trainingErrorRate = totalError*1.0/len(X)
+            for k in K:
+                Yk = [1 if y == k else -1 for y in Y]
 
-            # plot training results
-            #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Train')
-            #print(predictSVM(matrix(X)))
+                sol = svmcmpl.softmargin(matrix(X), matrix(Yk), C, kernel='rbf', sigma=1.0/(2*b))
+                predictSVM = sol['classifier']
+                errors = sol['misclassified']
+                totalError = len(errors[0] + errors[1])
+                trainingErrorRate = totalError*1.0/len(X)
 
-            #print '======Validation======'
-            # load data from csv files
-            #validate = loadtxt('data/data_'+name+'_validate.csv')
-            validate = loadtxt('data/data_'+name+'_test.csv')
-            X = validate[:, 0:2].copy()
-            Y = validate[:, 2:3].copy()
-            # plot validation results
-            #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Validate')
+                # plot training results
+                #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Train')
+                #print(predictSVM(matrix(X)))
 
-            yPredicted = predictSVM(matrix(X))
+                #print '======Validation======'
+                # load data from csv files
+                #validate = loadtxt('data/data_'+name+'_validate.csv')
+                validate = loadtxt('data/data_'+name+'_test.csv')
+                X = validate[:, 0:2].copy()
+                Y = validate[:, 2:3].copy()
+                # plot validation results
+                #plotDecisionBoundary(X, Y, predictSVM, [-1, 0, 1], title = 'SVM Validate')
+
+                probK[k] = predictSVM(matrix(X))
+
+            yPredicted = [np.argmax(np.array([probK[k][i] for k in probK])) for i in range(len(X))]
+
             nError = 0
             for i in range(len(yPredicted)):
                 if yPredicted[i] != Y[i]:
@@ -69,8 +77,8 @@ for name in ['smallOverlap', 'bigOverlap', 'ls', 'nonsep']:
             print(name, C, b, validationErrorRate) # trainingErrorRate
             print('')
 
-            #print('nError', nError)
-            #print('nTotal', len(yPredicted))
+                #print('nError', nError)
+                #print('nTotal', len(yPredicted))
 
 
 
