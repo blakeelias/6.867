@@ -56,7 +56,8 @@ def lr(X, Y, verbose=False, epsilon=0.0000001, regularizeLambda = 1e1, kernel='l
 
         if kernel == 'linear':
             if j % numIters == 0:
-                print('alpha magnitude: ', np.linalg.norm(alpha))
+                pass
+                #print('alpha magnitude: ', np.linalg.norm(alpha))
             ans = regularizeLambda * sqrt(sum(abs(alpha))**2 + epsilon)
             for i in range(len(X)):
                 exponent = -Y[i]*(dot(X[i], X, alpha) + w_0)
@@ -66,11 +67,13 @@ def lr(X, Y, verbose=False, epsilon=0.0000001, regularizeLambda = 1e1, kernel='l
                 except:
                     print('exception')
                     if j % numIters == 0:
-                        print('objective: ', ans)
+                        pass
+                        #print('objective: ', ans)
                     return ans
                     #return float('inf')
             if j % numIters == 0:
-                print('objective: ', ans)
+                pass
+                #print('objective: ', ans)
 
         if kernel == 'rbf':
             def kernelFunc(x1, x2):
@@ -95,11 +98,11 @@ def lr(X, Y, verbose=False, epsilon=0.0000001, regularizeLambda = 1e1, kernel='l
         gtol = 3*regularizeLambda
         #jac = numericalGradient(objective),
         )
-    print('result', result)
+    #print('result', result)
     alpha = result
 
-    print('retrieving from alpha')
-    print(alpha)
+    #print('retrieving from alpha')
+    #print(alpha)
     w_0 = alpha[0]
     alpha = alpha[1:]
     W = X.T.dot(alpha)
@@ -107,8 +110,10 @@ def lr(X, Y, verbose=False, epsilon=0.0000001, regularizeLambda = 1e1, kernel='l
     def logit(x):
         return 1.0 / (1.0 + exp(-x))
 
-    def classify(x):
-        return 1 if logit(x.dot(W) + w_0) > 0.5 else -1
+    def classify(x, soft=False):
+        p = logit(x.dot(W) + w_0)
+        if soft: return p
+        return 1 if p > 0.5 else -1
 
     return classify
 

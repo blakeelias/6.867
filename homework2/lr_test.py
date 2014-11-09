@@ -1,36 +1,41 @@
 from numpy import *
+import numpy as np
 from plotBoundary import *
 import klr
+from generate_kaggle_training import numPerClass, randomData
 
 # parameters
 name = 'ls2'
-print '======Training======'
 # load data from csv files
-train = loadtxt('data/data_'+name+'_train.csv')
-X = train[:,0:2]
-Y = train[:,2:3]
+train = loadtxt('data/kaggle_train.csv', delimiter = ',')
+X = train[:, 1:55].copy()
+Y = train[:, 55:56].copy()
 
-print('X')
-print(X)
-print('Y')
-print(Y)
+classes = range(1, 8)
+trainX, trainY = randomData(X, Y, 1000)
 
-# Carry out training.
-### TODO ###
+probK = {}
 
-predictLR = klr.lr(array(X), array(Y))
+for k in classes:
+    #print('training for class %d' % k)
+    Yk = np.array([[1.] if y == k else [-1.] for y in trainY])
+    #print(Yk)
 
-# Define the predictLR(x) function, which uses trained parameters
-### TODO ###
+    predictLR = klr.lr(array(trainX), array(trainY))
+    probK[k] = [predictLR(matrix(X[i]), soft = True) for i in range(len(X))]
 
-# plot training results
-plotDecisionBoundary(X, Y, predictLR, [0.5], title = 'LR Train')
+yPredicted = [np.argmax(np.array([probK[k][i] for k in probK])) + 1 for i in range(len(X))]
+print('yPredicted', yPredicted)
 
-print '======Validation======'
-# load data from csv files
-validate = loadtxt('data/data_'+name+'_test.csv')
-X = validate[:,0:2]
-Y = validate[:,2:3]
+nError = 0
+for i in range(len(yPredicted)):
+    if yPredicted[i] != Y[i]:
+        nError += 1
+validationErrorRate = nError*1.0/len(yPredicted)
 
-# plot validation results
-plotDecisionBoundary(X, Y, predictLR, [0.5], title = 'LR Validate')
+#print('weights')
+#print(weights)
+#print('geometric margin 1/||w||')
+
+print(validationErrorRate) # trainingErrorRate
+print('')

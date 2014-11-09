@@ -24,7 +24,7 @@ for name in ['kaggle_train']:
 
     classes = range(1, 8)
     #trainX, trainY = numPerClass(X, Y, classes, 200)
-    trainX, trainY = randomData(X, Y, 1000)
+    trainX, trainY = randomData(X, Y, 7000)
 
     #print('trainX', trainX, len(trainX))
     #print('trainY', trainY, len(trainY))
@@ -80,7 +80,7 @@ for name in ['kaggle_train']:
 
         probK[k] = predictSVM(matrix(X), soft = True)
 
-    yPredicted = [np.argmax(np.array([probK[k][i] for k in probK])) for i in range(len(X))]
+    yPredicted = [np.argmax(np.array([probK[k][i] for k in probK])) + 1 for i in range(len(X))]
 
     nError = 0
     for i in range(len(yPredicted)):

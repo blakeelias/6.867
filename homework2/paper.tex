@@ -81,7 +81,8 @@ Error rate: 48\%
 
     Results are shown below from testing an SVM with radial basis kernel function on all the datasets given using various values of $b$ (radial basis kernel bandwidth) and $C$.
 
-('name', 'C', 'b', 'error on validation set')
+(dataset name, C, b, error on validation set)
+
 ('smallOverlap', 0.01, 1, 0.115)
 
 ('smallOverlap', 0.01, 2, 0.105)
@@ -469,6 +470,14 @@ Error rate: 48\%
         \item
 
             As $C$ increases, the number of support vectors decreases.
+
+        \item
+
+            If we optimize $C$ based on training data, $C$ will tend to become very small as this is what maximizes the geometric margin since lowering $C$ allows more slack. But letting $C$ get small and making a bigger margin on the training data is in a sense just being ignorant about how the data really behave. This would essentially be pretending that the data are easily separable and have a wide separation, when really, they aren't.
+
+            Selecting $C$ to maximize the geometric margin on the validation set would be a better approach. Here, we get some external guidance as to how much slack we should allow on the training data, based on how well it will perform on a new, unseen data set. This won't just make $C$ tend to $0$; if $C$ dropped to $0$, the performance on the validation set would likely turn out very poor! Instead, $C$ will be guided towards some reasonable optimum that will likely turn out well on additional test data.
+
+            In general, this is what we usually do when picking parameters: optimize parameters based on their performance with validation data rather than training data. Another example would be for choosing the degree of a polynomial regression. Optimizing this strictly on the training data would lead to severe overfitting. Instead we choose the degree which will optimize the trained model's performance on validation data.
     \end{enumerate}
 
 \end{enumerate}
@@ -484,10 +493,19 @@ Error rate: 48\%
     \[ f(x) = \sum_j K(x, x^{(j)}) \alpha_j \]
     Here, $K$ is a kernel function which gives the dot product of two vectors $x_a$ and $x_b$, possibly in a transformed space, i.e. $\phi(x_a)*\phi(x_b)$.
 
+    \item
+        I implemented logistic regression with smoothed L1 regularization, using a penalty of $\sqrt{||\alpha||_1^2 + \epsilon}$, where $\epsilon = 0.0000001$.
+
+    \item
+        Increasing $\lambda$ caused the $\alpha$ vector to be both lower in magnitude and more sparse.
+
 \end{enumerate}
 
 \section{Multi-Label Classification}
 
-I used a one-versus-many SVM, where classification is made based on which class is scored with highest probability. I used a Gaussian kernel with bandwidth 10, and a training set consisting of 400 data points selected at random, the classifier classifies my test set with an error rate of 0.8588. 
+I created a multi-class SVM using the one-versus-many technique, where classification is made based on which class is scored with highest probability from a series of classifiers, each classifier being trained on data where elements from the class of interest are labeled +1 and elements from all other classifiers are labeled -1. Using a Gaussian kernel with bandwidth 10, and a training set consisting of 4000 data points selected at random from the training data, the classifier classifies my test set with an error rate of 0.46. 
+
+Using a Logistic Regression classifier, again using one-versus-many to separate multiple classes, my error rate was 0.86.
+
 \end{document}
 
