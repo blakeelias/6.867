@@ -1,5 +1,6 @@
 import numpy as np
 from pprint import pprint
+import random
 
 #train = loadtxt('data/kaggle_train.csv', delimiter = ',')
 #X = train[:, 1:55].copy()
@@ -27,3 +28,8 @@ def numPerClass(X, Y, classes, numPerClass):
 
     #print(n)
     return np.array(subsetX), np.array(subsetY)
+
+def randomData(X, Y, n):
+    indices = range(len(X))
+    random.shuffle(indices)
+    return np.array([X[i] for i in indices[0:n]]), np.array([Y[i] for i in indices[0:n]])

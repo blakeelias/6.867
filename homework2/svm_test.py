@@ -5,11 +5,11 @@ from plotBoundary import *
 from cvxopt import matrix
 import svmcmpl
 from svm import svmWeights
-from generate_kaggle_training import numPerClass
+from generate_kaggle_training import numPerClass, randomData
 
 # parameters
 #name = 'ls'
-print('name', 'C', 'b', 'error on validation set') # 'error on training set',
+print('name', 'C', 'b', 'kernel', 'error on validation set') # 'error on training set',
 #for name in ['smallOverlap', 'bigOverlap', 'ls', 'nonsep']:
 for name in ['kaggle_train']:
     #print '======Training======'
@@ -23,7 +23,9 @@ for name in ['kaggle_train']:
     Y = train[:, 55:56].copy()
 
     classes = range(1, 8)
-    trainX, trainY = numPerClass(X, Y, classes, 1000)
+    #trainX, trainY = numPerClass(X, Y, classes, 200)
+    trainX, trainY = randomData(X, Y, 1000)
+
     #print('trainX', trainX, len(trainX))
     #print('trainY', trainY, len(trainY))
 
@@ -40,6 +42,7 @@ for name in ['kaggle_train']:
     #print('C', 'b', 'error rate')
     C = 10
     b = 10
+    kernel = 'rbf'
     #for C in [0.1, 1, 10, 100]:
     #    for b in np.arange(1, 1000, 100):
             # b = 1/(2*sigma)
@@ -50,14 +53,16 @@ for name in ['kaggle_train']:
     #C = 1
     for k in classes:
         #print('training for class %d' % k)
-        Yk = [1 if y == k else -1 for y in trainY]
+        Yk = np.array([[1.] if y == k else [-1.] for y in trainY])
+        #print(Yk)
 
-        sol = svmcmpl.softmargin(matrix(trainX), matrix(Yk), C, kernel='rbf', sigma=1.0/(2*b))
+        sol = svmcmpl.softmargin(matrix(trainX), matrix(Yk), C, kernel=kernel) #, sigma=1.0/(2*b))
         predictSVM = sol['classifier']
         errors = sol['misclassified']
         totalError = len(errors[0] + errors[1])
-        trainingErrorRate = totalError*1.0/len(X)
+        trainingErrorRate = totalError*1.0/len(trainX)
 
+        #print(errors)
         #print('trainingErrorRate', trainingErrorRate)
 
         # plot training results
@@ -87,7 +92,7 @@ for name in ['kaggle_train']:
     #print(weights)
     #print('geometric margin 1/||w||')
 
-    print(name, C, b, validationErrorRate) # trainingErrorRate
+    print(name, C, b, kernel, validationErrorRate) # trainingErrorRate
     print('')
 
         #print('nError', nError)
