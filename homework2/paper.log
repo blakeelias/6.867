@@ -1,0 +1,414 @@
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  8 NOV 2014 21:34
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**paper.tex
+(./paper.tex
+LaTeX2e <2011/06/27>
+Babel <v3.8m> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman-x-2012-05-30, ngerman-x-2012-05-30, afrikaans, ancientgreek, ibycus, arabi
+c, armenian, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danis
+h, dutch, ukenglish, usenglishmax, esperanto, estonian, ethiopic, farsi, finnis
+h, french, friulan, galician, german, ngerman, swissgerman, monogreek, greek, h
+ungarian, icelandic, assamese, bengali, gujarati, hindi, kannada, malayalam, ma
+rathi, oriya, panjabi, tamil, telugu, indonesian, interlingua, irish, italian, 
+kurmanji, latin, latvian, lithuanian, mongolian, mongolianlmc, bokmal, nynorsk,
+ polish, portuguese, romanian, romansh, russian, sanskrit, serbian, serbianc, s
+lovak, slovenian, spanish, swedish, turkish, turkmen, ukrainian, uppersorbian, 
+welsh, loaded.
+(/usr/local/texlive/2012/texmf-dist/tex/latex/paper/paper.cls
+Document Class: paper 2008/05/30 1.0l LaTeX document class (wm).
+\hours=\count79
+\minutes=\count80
+(/usr/local/texlive/2012/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\beforetitlespace=\skip41
+\c@part=\count81
+\c@section=\count82
+\c@subsection=\count83
+\c@subsubsection=\count84
+\c@paragraph=\count85
+\c@subparagraph=\count86
+\exampleindent=\skip42
+\c@figure=\count87
+\c@table=\count88
+\abovecaptionskip=\skip43
+\belowcaptionskip=\skip44
+\bibindent=\dimen102
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/base/latexsym.sty
+Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 47.
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2009/06/22 v3.00
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
+\@emptytoks=\toks14
+\symAMSa=\mathgroup5
+\symAMSb=\mathgroup6
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 96.
+))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip45
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks15
+\ex@=\dimen103
+))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen104
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count89
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count90
+\leftroot@=\count91
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count92
+\DOTSCASE@=\count93
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count94
+\c@MaxMatrixCols=\count95
+\dotsspace@=\muskip10
+\c@parentequation=\count96
+\dspbrk@lvl=\count97
+\tag@help=\toks16
+\row@=\count98
+\column@=\count99
+\maxfields@=\count100
+\andhelp@=\toks17
+\eqnshift@=\dimen106
+\alignsep@=\dimen107
+\tagshift@=\dimen108
+\tagwidth@=\dimen109
+\totwidth@=\dimen110
+\lineht@=\dimen111
+\@envbody=\toks18
+\multlinegap=\skip46
+\multlinetaggap=\skip47
+\mathdisplay@stack=\toks19
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/tools/verbatim.sty
+Package: verbatim 2003/08/22 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks20
+\verbatim@line=\toks21
+\verbatim@in@stream=\read1
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/listings/listings.sty
+(/usr/local/texlive/2012/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks22
+)
+\lst@mode=\count101
+\lst@gtempboxa=\box28
+\lst@token=\toks23
+\lst@length=\count102
+\lst@currlwidth=\dimen112
+\lst@column=\count103
+\lst@pos=\count104
+\lst@lostspace=\dimen113
+\lst@width=\dimen114
+\lst@newlines=\count105
+\lst@lineno=\count106
+\lst@maxwidth=\dimen115
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
+\c@lstnumber=\count107
+\lst@skipnumbers=\count108
+\lst@framebox=\box29
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2007/02/22 1.4 listings configuration
+))
+Package: listings 2007/02/22 1.4 (Carsten Heinz)
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+(/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count109
+))
+\Gin@req@height=\dimen116
+\Gin@req@width=\dimen117
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count110
+\float@exts=\toks24
+\float@box=\box30
+\@float@everytoks=\toks25
+\@floatcapt=\box31
+) (./paper.aux)
+\openout1 = `paper.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+\c@lstlisting=\count111
+
+(/usr/local/texlive/2012/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count112
+\scratchdimen=\dimen118
+\scratchbox=\box32
+\nofMPsegments=\count113
+\nofMParguments=\count114
+\everyMPshowfont=\toks26
+\MPscratchCnt=\count115
+\MPscratchDim=\dimen119
+\MPnumerator=\count116
+\makeMPintoPDFobject=\count117
+\everyMPtoPDFconversion=\toks27
+) (/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+(/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+
+(/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+))
+(/usr/local/texlive/2012/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+(/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+(/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+LaTeX Font Info:    Try loading font information for U+lasy on input line 20.
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/base/ulasy.fd
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 20.
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2009/06/22 v3.00 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 20.
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2009/06/22 v3.00 AMS symbols B
+) [1{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+
+] [2] [3] [4] [5]
+[6] [7]
+Overfull \hbox (36.99692pt too wide) in paragraph at lines 508--508
+ []\OT1/cmtt/m/n/10 [  2.41847028e+00   2.88931450e-04  -1.91484206e-01  -1.701
+79087e-03[] 
+ []
+
+
+Overfull \hbox (36.99692pt too wide) in paragraph at lines 509--509
+ []   \OT1/cmtt/m/n/10 3.25816493e+00   3.61459686e-01   1.10543081e+00   9.993
+11758e-01[] 
+ []
+
+
+Overfull \hbox (36.99692pt too wide) in paragraph at lines 510--510
+ []   \OT1/cmtt/m/n/10 1.54273792e+00   2.31627345e+00   7.45881937e-02  -1.295
+48824e+00[] 
+ []
+
+
+Overfull \hbox (36.99692pt too wide) in paragraph at lines 511--511
+ []   \OT1/cmtt/m/n/10 1.27376250e+00   5.48178489e-01  -1.48065236e+00  -1.376
+02189e+00[] 
+ []
+
+
+Overfull \hbox (36.99692pt too wide) in paragraph at lines 512--512
+ []  \OT1/cmtt/m/n/10 -1.80351903e+00  -6.40105831e-01  -1.73712235e+00  -1.331
+00161e+00[] 
+ []
+
+
+Overfull \hbox (36.99692pt too wide) in paragraph at lines 513--513
+ []   \OT1/cmtt/m/n/10 1.33789765e+00  -5.82192993e-01  -1.95357256e-03   1.088
+56718e+00[] 
+ []
+
+
+Overfull \hbox (57.99673pt too wide) in paragraph at lines 521--521
+ []\OT1/cmtt/m/n/10 [ 2.0027146   0.09358828 -0.17248321  0.00372521  2.6772493
+2  0.34311617[] 
+ []
+
+
+Overfull \hbox (57.99673pt too wide) in paragraph at lines 522--522
+ []  \OT1/cmtt/m/n/10 0.91894831  0.87582331  1.29255722  1.91202766  0.1475987
+8 -1.04707678[] 
+ []
+
+
+Overfull \hbox (57.99673pt too wide) in paragraph at lines 523--523
+ []  \OT1/cmtt/m/n/10 1.0607957   0.45428338 -1.23041484 -1.17592927 -1.5150649
+1 -0.57038873[] 
+ []
+
+
+Overfull \hbox (57.99673pt too wide) in paragraph at lines 524--524
+ [] \OT1/cmtt/m/n/10 -1.45508168 -1.13882162  1.07293089 -0.50759425 -0.0055070
+5  0.91457435[] 
+ []
+
+
+Overfull \hbox (57.99673pt too wide) in paragraph at lines 532--532
+ []\OT1/cmtt/m/n/10 [ 0.1687428   0.51599742  0.30213681  0.29481348  0.1190947
+1  0.25919003[] 
+ []
+
+
+Overfull \hbox (57.99673pt too wide) in paragraph at lines 533--533
+ []  \OT1/cmtt/m/n/10 0.12088451  0.30941376  0.19161711  0.13759177  0.4273032
+1  0.42040996[] 
+ []
+
+
+Overfull \hbox (57.99673pt too wide) in paragraph at lines 534--534
+ []  \OT1/cmtt/m/n/10 0.13959925 -0.34902078 -0.14749712 -0.28157096 -0.2378222
+4 -0.26288725[] 
+ []
+
+
+Overfull \hbox (57.99673pt too wide) in paragraph at lines 535--535
+ [] \OT1/cmtt/m/n/10 -0.21293495 -0.28014943 -0.46379548 -0.19588088 -0.2630597
+1 -0.26758934[] 
+ []
+
+[8]
+Overfull \hbox (57.99673pt too wide) in paragraph at lines 543--543
+ []\OT1/cmtt/m/n/10 [ 0.01000634  0.04802424  0.0246105   0.02380873  0.0045708
+   0.01990863[] 
+ []
+
+
+Overfull \hbox (52.74678pt too wide) in paragraph at lines 544--544
+ []  \OT1/cmtt/m/n/10 0.00476675  0.02540719  0.01251065  0.00659589  0.0383138
+8  0.0375592[] 
+ []
+
+
+Overfull \hbox (57.99673pt too wide) in paragraph at lines 545--545
+ []  \OT1/cmtt/m/n/10 0.00681567 -0.0466791  -0.02461602 -0.03929461 -0.0345049
+4 -0.03724909[] 
+ []
+
+
+Overfull \hbox (57.99673pt too wide) in paragraph at lines 546--546
+ [] \OT1/cmtt/m/n/10 -0.03178024 -0.03913898 -0.05924479 -0.02991314 -0.0372679
+7 -0.03776388[] 
+ []
+
+[9] (./paper.aux) ) 
+Here is how much of TeX's memory you used:
+ 3785 strings out of 493488
+ 51933 string characters out of 3141326
+ 113770 words of memory out of 3000000
+ 7044 multiletter control sequences out of 15000+200000
+ 7329 words of font info for 31 fonts, out of 3000000 for 9000
+ 957 hyphenation exceptions out of 8191
+ 37i,9n,32p,545b,396s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmex10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmmi10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi7.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr7.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r9.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9
+.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx1
+0.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10
+.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.
+pfb>
+Output written on paper.pdf (9 pages, 118631 bytes).
+PDF statistics:
+ 74 PDF objects out of 1000 (max. 8388607)
+ 52 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+
